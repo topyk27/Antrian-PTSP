@@ -119,6 +119,38 @@ body
     background: #03a9f4;
 }
 
+.circle.lima {
+    background: #00FFFF;
+}
+
+.content.lima a {
+    background: #00FFFF;
+}
+
+.circle.enam {
+    background: #FF00FF;
+}
+
+.content.enam a {
+    background: #FF00FF;
+}
+
+.circle.tujuh {
+    background: #FFFF00;
+}
+
+.content.tujuh a {
+    background: #FFFF00;
+}
+
+.circle.delapan {
+    background: #000000;
+}
+
+.content.delapan a {
+    background: #000000;
+}
+
 .card:hover .content .button a {
     background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
     background-size: 400%;

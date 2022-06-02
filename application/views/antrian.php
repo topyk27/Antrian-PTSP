@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/loader.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/antrian.css') ?>">
 </head>
+
 <body>
     <div class="wrapper">
         <div class="container">
@@ -47,16 +49,16 @@
                         <div class="row">
                             <div class="datetime">
                                 <div class="date">
-                                <!-- <span id="dayname">Day</span>, -->
-                                <span id="month">Month</span>
-                                <span id="daynum">00</span>,
-                                <span id="year">Year</span>
+                                    <!-- <span id="dayname">Day</span>, -->
+                                    <span id="month">Month</span>
+                                    <span id="daynum">00</span>,
+                                    <span id="year">Year</span>
                                 </div>
                                 <div class="time">
-                                <span id="hour">00</span>:
-                                <span id="minutes">00</span>:
-                                <span id="seconds">00</span>
-                                <span id="period">AM</span>
+                                    <span id="hour">00</span>:
+                                    <span id="minutes">00</span>:
+                                    <span id="seconds">00</span>
+                                    <span id="period">AM</span>
                                 </div>
                             </div>
                         </div>
@@ -132,53 +134,110 @@
                 </div>
             </div>
         </div>
+        <!-- modal -->
+        <div class="modal fade" id="modal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100 text-center">nomor antrian anda </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Silahkan ambil struk anda, apabila struk tidak keluar harap diingat nomor antrian yang tampil pada layar</p>
+                    </div>
+                    <!-- <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <!-- end modal -->
+        <!-- loader -->
+        <?php $this->load->view("_partials/loader.php") ?>
+        <!-- end loader -->
     </div>
     <!-- jQuery -->
-	<script src="<?php echo base_url('asset/js/jquery/jquery.min.js') ?>"></script>
+    <script src="<?php echo base_url('asset/js/jquery/jquery.min.js') ?>"></script>
     <!-- Bootstrap 4 -->
-	<script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
+    <script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
+    <!-- mine -->
+    <script src="<?php echo base_url('asset/mine/js/jam.js') ?>"></script>
     <script type="text/javascript">
-		function updateClock(){
-		      var now = new Date();
-		      var dname = now.getDay(),
-		          mo = now.getMonth(),
-		          dnum = now.getDate(),
-		          yr = now.getFullYear(),
-		          hou = now.getHours(),
-		          min = now.getMinutes(),
-		          sec = now.getSeconds(),
-		          pe = "AM";
+        const base_url = "<?php echo base_url(); ?>";
+        const print = true;
+        function ambil_antrian(kode) {
+            $.ajax({
+                type: 'get',
+                url: base_url + "antrian/tambah/" + kode,
+                dataType: 'json',
+                beforeSend: function() {
+                    console.log("before send");
+                    $(".loader2").show();
+                },
+                success: function(data) {
+                    
+                    if (data.success != 1) {
+                        alert("gagal ambil nomor antrian");
+                    } else {
+                        if (print) {
+                            console.log("jalankan fungsi cetak");
+                            cetak(data.no);
+                        } else {
+                            $(".loader2").hide();
+                            $(".modal-title").text("Nomor antrian anda " + data.no);
+                            $("#modal").modal('show');
+                            setTimeout(() => {
+                                $("#modal").modal('hide');
+                            }, 5000);
+                        }
+                    }
+                },
+                error: function(err) {
+                    console.log(err.responseText);
+                    alert("ada kesalahan, harap refresh halaman");
+                },
+                complete: function() {
+                    // $("#modal").modal('hide');
+                }
+            });
+        }
 
-		          if(hou >= 12){
-		            pe = "PM";
-		          }
-		          if(hou == 0){
-		            hou = 12;
-		          }
-		          if(hou > 12){
-		            hou = hou - 12;
-		          }
-
-		          Number.prototype.pad = function(digits){
-		            for(var n = this.toString(); n.length < digits; n = 0 + n);
-		            return n;
-		          }
-
-		          var months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-		          var week = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-		          // var ids = ["dayname", "month", "daynum", "year", "hour", "minutes", "seconds", "period"];
-		          var ids = ["month", "daynum", "year", "hour", "minutes", "seconds", "period"];
-		          // var values = [week[dname], dnum.pad(2), months[mo], yr, hou.pad(2), min.pad(2), sec.pad(2), pe];
-		          var values = [dnum.pad(2), months[mo], yr, hou.pad(2), min.pad(2), sec.pad(2), pe];
-		          for(var i = 0; i < ids.length; i++)
-		          document.getElementById(ids[i]).firstChild.nodeValue = values[i];
-		    }
-
-		    function initClock(){
-		      updateClock();
-		      window.setInterval("updateClock()", 1);
-		    }
-		    initClock();
-	</script>
+        function cetak(no) {
+            $.ajax({
+                type: 'POST',
+                url: base_url + "antrian/cetak",
+                data: {
+                    no: no
+                },
+                dataType: 'json',
+                beforeSend: function() {
+                    console.log("nomor " + no);
+                },
+                success: function(respon) {
+                    console.log(respon);
+                    if (respon.success == 1) {
+                        console.log("berhasil kirim data ke printer");
+                    } else {
+                        alert("gagal kirim data ke printer");
+                    }
+                },
+                error: function(err, jqXHR, exception) {
+                    console.log(err);
+                    console.log(jqXHR.status);
+                    console.log(exception);
+                    console.log(err.responseText);
+                },
+                complete: function() {
+                    $(".loader2").hide();
+                    $(".modal-title").text("Nomor antrian anda " + no);
+                    $("#modal").modal('show');
+                    setTimeout(() => {
+                        $("#modal").modal('hide');
+                    }, 5000);
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>

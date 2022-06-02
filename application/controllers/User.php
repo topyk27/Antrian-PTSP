@@ -48,6 +48,12 @@ class User extends CI_Controller
         }
     }
 
+    public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect(base_url('user/login'));
+	}
+
     public function data_user()
 	{
 		$data = $this->M_user->getAll();

@@ -8,6 +8,11 @@ class Antrian extends CI_Controller
 		$this->load->model("M_antrian");
 	}
 
+	public function index()
+	{
+		$this->load->view('welcome');
+	}
+
 	public function monitor()
 	{
 		$this->load->view('monitor');
@@ -22,6 +27,11 @@ class Antrian extends CI_Controller
 	{
 		$data = $this->M_antrian->getAntrian($layanan);
 		echo json_encode($data);
+	}
+
+	public function layanan($layanan)
+	{
+		$this->load->view('list');
 	}
 
     public function cetak()

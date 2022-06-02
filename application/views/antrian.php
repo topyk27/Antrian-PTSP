@@ -164,7 +164,7 @@
     <script src="<?php echo base_url('asset/mine/js/jam.js') ?>"></script>
     <script type="text/javascript">
         const base_url = "<?php echo base_url(); ?>";
-        const print = true;
+        const print = false;
         function ambil_antrian(kode) {
             $.ajax({
                 type: 'get',

@@ -7,13 +7,16 @@
         <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>Dashboard</p>
       </a>
-    </li>   
+    </li>
+    <?php if($this->session->userdata('role') != 'admin'): ?>
     <li class="nav-item">
-      <a href="<?php echo base_url('antrian'); ?>" class="nav-link" id="sidebar_antrian">
+      <a href="<?php echo base_url('antrian/layanan/'.$this->session->userdata('layanan')); ?>" class="nav-link" id="sidebar_antrian">
         <i class="nav-icon fas fa-list"></i>
         <p>Antrian</p>
       </a>
     </li>
+    <?php endif; ?>
+    <?php if($this->session->userdata('role') == 'admin'): ?>
     <li class="nav-item has-treeview">
       <a href="#" class="nav-link" id="sidebar_setting">
         <i class="nav-icon fas fa-cog"></i>
@@ -34,6 +37,7 @@
         </li>
       </ul>
     </li>
+    <?php endif; ?>
     <li class="nav-item">
       <a href="<?php echo base_url('about'); ?>" class="nav-link" id="sidebar_about">
         <i class="nav-icon fas fa-info-circle"></i>

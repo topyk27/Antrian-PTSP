@@ -64,7 +64,7 @@
                 <?php $this->load->view("_partials/numpang.php") ?>
             </section>
         </div>
-        <?php $this->load->view("_partials/footer.php") ?>		
+        <?php $this->load->view("_partials/footer.php") ?>
         <aside class="control-sidebar control-sidebar-dark"></aside>
     </div>
     <div id="hapusModal" class="modal fade">
@@ -141,7 +141,7 @@
                     }},
                     {data: "username"},
                     {data: "nama"},
-                    {data: "layanan"},
+                    {data: "nama_layanan"},
                     {data: null, "sortable" : false, render: function(data,type,row,meta){
                         return "<a href='<?php echo base_url('setting/user_ubah/') ?>"+row['id']+"' class='btn btn-warning'><i class='fas fa-edit'></i>Ubah</a>";
                     }},

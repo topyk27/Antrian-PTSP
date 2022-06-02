@@ -6,7 +6,7 @@ $config['panggil']= 'luar'; // luar | pc
 //luar = pc monitor yang berbunyi
 //pc = pc ruang sidang yang berbunyi
 
-$config['print']='disable'; //enable | disable
+$config['print']=true; //true | false
 //print not tested
 
  ?>

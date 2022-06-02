@@ -44,7 +44,7 @@ class M_antrian extends CI_Model
 	public function getAntrian($ke)
 	{
 		$tgl = date("Y/m/d");
-		$statement = "SELECT no FROM antrian WHERE tanggal = '".$tgl."' && ke LIKE '".$ke."' && status NOT LIKE 'kelar' ORDER BY diperbarui ASC";
+		$statement = "SELECT * FROM antrian WHERE tanggal = '".$tgl."' && ke LIKE '".$ke."' && status NOT LIKE 'kelar' ORDER BY diperbarui ASC";
 		$query = $this->db->query($statement);
 		return $query->result();
 	}

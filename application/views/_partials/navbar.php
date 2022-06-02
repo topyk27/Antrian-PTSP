@@ -16,8 +16,7 @@
         <li class="nav-item d-none d-sm-inline-block text-right">
         <a href="#" id="btn-logout">
             <i class="fas fa-power-off"></i>
-            <!--  print_r($this->session->userdata('nama')); echo "<br>"; print_r($this->session->userdata('nama_layanan'))  -->
-            nama
+             <?php print_r($this->session->userdata('nama')); echo "<br>"; print_r($this->session->userdata('nama_layanan'))  ?>            
         </a>
         </li>
     </ul>

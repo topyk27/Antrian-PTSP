@@ -112,5 +112,11 @@ class Setting extends CI_Controller
 		}
 	}
 
+	public function data_layanan()
+	{
+		$user = $this->M_user;		
+		echo json_encode($user->data_ruang());
+	}
+
 }
  ?>

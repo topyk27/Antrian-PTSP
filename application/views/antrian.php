@@ -309,7 +309,10 @@
         }
 
         $(document).ready(function(){
-            cek_panggil();
+            if(confirm('pencet ok'))
+            {
+                cek_panggil();
+            }
         });
     </script>
 </body>

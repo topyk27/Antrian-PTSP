@@ -126,4 +126,28 @@ class M_antrian extends CI_Model
 		}
 		echo json_encode($respon);
 	}
+
+	public function update($id,$ke)
+	{
+		if($ke=="tunda")
+		{
+			$this->db->set("status","tunda");
+		}
+		else
+		{
+			$this->db->set("ke", $ke);
+			$this->db->set("status", "menunggu");
+		}
+		$this->db->set("diperbarui", 'NOW()', FALSE);
+		$this->db->where("id", $id);
+		$query = $this->db->update('antrian');
+		$efek = $this->db->affected_rows();
+		$response['success'] = $efek;
+		echo json_encode($response);
+	}
+
+	public function delete($id)
+	{
+		return $this->db->delete($this->_table,['id' => $id]);
+	}
 }

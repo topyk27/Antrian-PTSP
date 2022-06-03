@@ -58,6 +58,26 @@ class Antrian extends CI_Controller
 		return $this->M_antrian->cek_panggilan($id);
 	}
 
+	public function ubah()
+	{
+		$id = $this->input->post('id');
+		$ke = $this->input->post('ke');
+		return $this->M_antrian->update($id,$ke);
+	}
+
+	public function hapus()
+	{
+		$id = $this->input->post('id');
+		if($this->M_antrian->delete($id))
+		{
+			echo 1;
+		}
+		else
+		{
+			echo 0;
+		}
+	}
+
     public function cetak()
     {
         $tanggal = date("d-m-Y");

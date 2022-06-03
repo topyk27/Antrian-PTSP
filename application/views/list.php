@@ -47,6 +47,7 @@
                                             <th></th>
                                             <th>#</th>
                                             <th>Antrian</th>
+                                            <th>Status</th>
                                             <th>Panggil</th>
                                         </tr>
                                     </thead>
@@ -71,6 +72,7 @@
             </div>
         </div>
     </div>
+    <?php $this->load->view("_partials/loader.php") ?>
     <!-- jQuery -->
 	<script src="<?php echo base_url('asset/js/jquery/jquery.min.js') ?>"></script>
     <!-- Bootstrap 4 -->
@@ -85,6 +87,7 @@
     <script>
         const base_url = "<?php echo base_url(); ?>";
         const layanan = "<?php echo $this->session->userdata('layanan');?>"
+        const nama_layanan = "<?php echo $this->session->userdata('nama_layanan');?>"
     </script>
     <script>
         var dt_antrian;
@@ -102,8 +105,9 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }},
                     {data:'no'},
+                    {data:'status'},
                     {data: null, "sortable" : false, render: function(data,type,row,meta){
-                        return "<a href='#' onclick='panggil("+row['id']+")' class='btn btn-primary'><i class='fas fa-phone'></i> Panggil</a>";
+                        return "<a href='#' onclick='panggil("+row['id']+","+row['no']+")' class='btn btn-primary'><i class='fas fa-phone'></i> Panggil</a>";
                     }},
                 ],
                 columnDefs: [
@@ -114,6 +118,70 @@
                 autoWidth: false,
             });
         });
+
+        function panggil(id,no)
+        {
+            $.ajax({
+                type: 'post',
+                url: base_url+'antrian/panggil',
+                data: {no:no,layanan:nama_layanan},
+                dataType: 'json',
+                beforeSend: function()
+                {
+                    console.log('beforesend');
+                    $('.loader2').show();
+                },
+                success: function(respon)
+                {
+                    if (respon.success==1)
+                    {
+                        cek_panggilan(respon.id);
+                    }
+                    else
+                    {
+                        $(".loader2").hide();
+                        alert("gagal memanggil, silahkan coba lagi");
+                    }
+                },
+                error: function(err)
+                {
+                    console.log(err.responseText);
+                    $(".loader2").hide();
+                    alert("gagal memanggil, silahkan coba lagi");
+                }
+            });
+        }
+
+        function cek_panggilan(id)
+        {
+            let terpanggil = false;
+            $.ajax({
+                type: 'post',
+                url: base_url+'antrian/cek_panggilan',
+                data: {id:id},
+                dataType: 'json',
+                success: function(respon)
+                {
+                    if(respon.efek!=1)
+                    {
+                        terpanggil = true;
+                    }
+                },
+                complete: function()
+                {
+                    if(terpanggil)
+                    {
+                        $(".loader2").hide();
+                    }
+                    else
+                    {
+                        setTimeout(() => {
+                            cek_panggilan(id);
+                        }, 3000);
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

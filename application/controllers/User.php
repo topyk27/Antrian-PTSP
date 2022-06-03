@@ -31,7 +31,7 @@ class User extends CI_Controller
         $this->load->view('user/login');
         if($this->M_user->isLogin())
 		{
-			redirect(base_url());
+			redirect(base_url('antrian'));
 		}
     }
     

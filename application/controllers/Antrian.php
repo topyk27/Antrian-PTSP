@@ -34,6 +34,30 @@ class Antrian extends CI_Controller
 		$this->load->view('list');
 	}
 
+	public function panggil_antrian()
+	{
+		return $this->M_antrian->panggil_antrian();
+	}
+
+	public function hapus_panggil_antrian()
+	{
+		$id = $this->input->post('id');
+		return $this->M_antrian->hapus_panggil_antrian($id);
+	}
+
+	public function panggil()
+	{
+		$no = $this->input->post('no');
+		$layanan = $this->input->post('layanan');
+		return $this->M_antrian->insertPanggilan($no,$layanan);
+	}
+
+	public function cek_panggilan()
+	{
+		$id = $this->input->post('id');
+		return $this->M_antrian->cek_panggilan($id);
+	}
+
     public function cetak()
     {
         $tanggal = date("d-m-Y");

@@ -161,10 +161,13 @@
     <!-- Bootstrap 4 -->
     <script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
     <!-- mine -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=6UoEN13s"></script>
     <script src="<?php echo base_url('asset/mine/js/jam.js') ?>"></script>
     <script type="text/javascript">
         const base_url = "<?php echo base_url(); ?>";
         const print = false;
+        const voice = "Indonesian Male";
+
         function ambil_antrian(kode) {
             $.ajax({
                 type: 'get',
@@ -237,6 +240,77 @@
                 }
             });
         }
+
+        function cek_panggil()
+        {
+            $.ajax({
+                type: 'get',
+                url: base_url+'antrian/panggil_antrian',
+                dataType: 'json',
+                success: function(respon)
+                {
+                    if(respon.success==1)
+                    {
+                        memanggil_antrian(respon.id,respon.no,respon.layanan,respon.pengumuman);
+                    }
+                    else
+                    {
+                        setTimeout(() => {
+                            cek_panggil();
+                        }, 3000);
+                    }
+                },
+                error: function(err)
+                {
+                    console.log(err.responseText);
+                }
+            });
+        }
+
+        function memanggil_antrian(id,no,layanan,pengumuman)
+        {
+            let text;
+            if(pengumuman != null)
+            {
+                text = pengumuman;
+            }
+            else
+            {
+                text = "Dipanggil nomor antrian " + no + ". Silahkan ke layanan " + layanan;
+            }
+            responsiveVoice.speak(text,voice, {
+                rate: 0.9, onend: function(){
+                    setTimeout(function(){
+                        responsiveVoice.speak(text,voice, {rate: 0.9, onend: hapus_panggil_antrian(id)});
+                    },2000);
+                }
+            });
+        }
+
+        function hapus_panggil_antrian(id)
+        {
+            $.ajax({
+                type: 'post',
+                url: base_url+'antrian/hapus_panggil_antrian',
+                data: {id:id},
+                dataType: 'json',
+                success: function(respon)
+                {
+                    if(respon.success==1)
+                    {
+
+                    }
+                },
+                complete: function()
+                {
+                    setTimeout(cek_panggil,7000);
+                }
+            });
+        }
+
+        $(document).ready(function(){
+            cek_panggil();
+        });
     </script>
 </body>
 

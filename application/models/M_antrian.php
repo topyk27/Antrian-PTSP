@@ -48,4 +48,82 @@ class M_antrian extends CI_Model
 		$query = $this->db->query($statement);
 		return $query->result();
 	}
+
+	public function panggil_antrian()
+	{
+		$statement = "SELECT * FROM panggil ORDER BY created_at ASC LIMIT 1";
+		$query = $this->db->query($statement);
+		if(empty($query->result()))
+		{
+			$respon['success'] = 0;
+		}
+		else
+		{
+			$respon['success'] = 1;
+			foreach($query->result() as $row)
+			{
+				$respon['id'] = $row->id;
+				$respon['no'] = $row->no;
+				$respon['layanan'] = $row->layanan;
+				$respon['pengumuman'] = $row->pengumuman;
+			}
+		}
+		echo json_encode($respon);
+	}
+
+	public function hapus_panggil_antrian($id)
+	{
+		$this->db->delete("panggil", ["id" => $id]);
+		$respon['success'] = ($this->db->affected_rows() != 1) ? 0 : 1; 
+		echo json_encode($respon);
+	}
+
+	public function insertPanggilan($no,$layanan)
+	{
+		if($this->input->post('pengumuman'))
+		{
+			$pengumuman = $this->input->post('pengumuman');
+		}
+		$this->db->where('id', $no.$layanan);
+		$q = $this->db->get("panggil");
+		if(empty($q->result()))
+		{
+			$data = array(
+				'id' => $no . $layanan,
+				'no' => $no,
+				'layanan' => $layanan,
+			);
+			if($layanan=="pengumuman")
+			{
+				$data['pengumuman'] = $pengumuman;
+			}
+			else
+			{
+				$data['pengumuman'] = null;
+			}
+			$this->db->insert('panggil', $data);
+			$respon['success'] = ($this->db->affected_rows() != 1) ? 0 : 1; //kalo berhasil return 1 kalo gagal return 0
+		}
+		else
+		{
+			$respon['success'] = 1;
+		}
+		$respon['id'] = $no . $layanan;
+		echo json_encode($respon);
+	}
+
+	public function cek_panggilan($id)
+	{
+		$this->db->where('id', $id);
+		$q = $this->db->get('panggil');
+		if(empty($q->result()))
+		{
+			$respon['efek'] = 0;
+		}
+		else
+		{
+			$respon['efek'] = 1;
+		}
+		echo json_encode($respon);
+	}
 }

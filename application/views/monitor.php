@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor</title>
+    <title>Monitor</title>    
+    <link rel="icon" type="image/png" href="<?php echo base_url('asset/img/icon.png'); ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/dist/css/adminlte.min.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/css/fontawesome-free/css/all.min.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/antrian.css') ?>">
@@ -22,21 +23,26 @@
                                 <img src="<?php echo base_url('asset/img/logo.png'); ?>" class="img-fluid logo">
                             </div>
                             <div class="col-md-10">
-                                <h2>PENGADILAN AGAMA TENGGARONG</h2>
-                                <h5>Jalan Pesut, Kelurahan Timbau, Kecamatan Tenggarong Kabupaten Kutai Kartanegara, Kalimantan Timur 75511</h5>
+                                <h2 class="text-uppercase">PENGADILAN AGAMA <?php echo $setting->nama_pa; ?></h2>
+                                <h5><?php echo $setting->alamat; ?></h5>
                                 <div class="row">
+                                    <?php if(!empty($setting->telepon)): ?>
                                     <div class="col-md-3">
-                                        <span><i class="fas fa-phone"></i> 0541-6667063 </span>
+                                        <span><i class="fas fa-phone"></i> <?php echo $setting->telepon; ?> </span>
                                     </div>
+                                    <?php endif; if(!empty($setting->facebook)):?>
                                     <div class="col-md-3">
-                                        <span><i class="fab fa-facebook"></i> PA Tenggarong </span>
+                                        <span><i class="fab fa-facebook"></i> <?php echo $setting->facebook; ?> </span>
                                     </div>
+                                    <?php endif; if(!empty($setting->instagram)):?>
                                     <div class="col-md-3">
-                                        <span><i class="fab fa-instagram"></i> pa_tenggarong </span>
+                                        <span><i class="fab fa-instagram"></i> <?php echo $setting->instagram; ?> </span>
                                     </div>
+                                    <?php endif; if(!empty($setting->twitter)):?>
                                     <div class="col-md-3">
-                                        <span><i class="fab fa-twitter"></i> PaTenggarong </span>
+                                        <span><i class="fab fa-twitter"></i> <?php echo $setting->twitter; ?> </span>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -304,6 +310,16 @@
                     emptyTable: "Tidak ada antrian"
                 }
             });
+            setInterval(() => {
+                dt_pengaduan.ajax.reload();
+                dt_pendaftaran.ajax.reload();
+                dt_produk.ajax.reload();
+                dt_ecourt.ajax.reload();
+                dt_kasir.ajax.reload();
+                dt_posbakum.ajax.reload();
+                dt_bank.ajax.reload();
+                dt_pos.ajax.reload();
+            }, 10000);
         });
     </script>
 </body>

@@ -15,7 +15,9 @@ class Antrian extends CI_Controller
 
 	public function monitor()
 	{
-		$this->load->view('monitor');
+		$this->load->model("M_setting");
+		$data['setting'] = $this->M_setting->getAll();
+		$this->load->view('monitor',$data);
 	}
 
     public function tambah($layanan)
@@ -31,7 +33,14 @@ class Antrian extends CI_Controller
 
 	public function layanan($layanan)
 	{
-		$this->load->view('list');
+		if($this->session->userdata('role')!='admin')
+		{
+			$this->load->view('list');
+		}
+		else
+		{
+			redirect('user/login');
+		}
 	}
 
 	public function panggil_antrian()
@@ -76,6 +85,24 @@ class Antrian extends CI_Controller
 		{
 			echo 0;
 		}
+	}
+
+	public function statistik()
+	{
+		if($this->session->userdata('login'))
+		{
+			$data['antrian'] = $this->M_antrian->getStatistik();
+			echo json_encode($data);
+		}
+		else
+		{
+			redirect('user/login');
+		}
+	}
+
+	public function tutup()
+	{
+		$this->load->view('tutup');
 	}
 
     public function cetak()

@@ -13,10 +13,19 @@ class M_antrian extends CI_Model
 
     public function getNO($layanan)
     {
-        $tgl = date("Y/m/d");
-        $statement = "SELECT MAX(no) AS no FROM antrian WHERE tanggal = '".$tgl."'";
-        $query = $this->db->query($statement);
-        $a = $query->row();
+        $this->config->load('antrian_config',TRUE);
+		$berurut = $this->config->item('berurut','antrian_config');
+		$tgl = date("Y/m/d");
+		if($berurut=='false')
+		{
+			$statement = "SELECT MAX(no) AS no FROM antrian WHERE tanggal = '".$tgl."'";
+		}
+		else
+		{
+			$statement = "SELECT MAX(no) AS no FROM antrian WHERE tanggal = '".$tgl."' AND layanan='$layanan'";			
+		}
+		$query = $this->db->query($statement);
+		$a = $query->row();
 		if (empty($a->no))
 		{
 			$no = 1;
@@ -25,7 +34,7 @@ class M_antrian extends CI_Model
 		{
 			$no = $a->no+1;
 		}
-        $layanan = str_replace("%20"," ",$layanan);
+		$layanan = str_replace("%20"," ",$layanan);
 		$statement1 = "INSERT INTO antrian VALUES ('', '".$layanan."','".$no."','".$layanan."','menunggu','".$tgl."', CURRENT_TIMESTAMP)";
 		$query1 = $this->db->query($statement1);
 		$efek = $this->db->affected_rows();		
@@ -36,10 +45,44 @@ class M_antrian extends CI_Model
 		else
 		{
 			$respon['success'] = 1;
-			$respon['no'] = $no;			
+			// $respon['no'] = $no;			
+			$respon['no'] = ($berurut=='true') ? $this->kode($layanan).$no : $no;
 		}
 		echo json_encode($respon);
     }
+
+	public function kode($layanan)
+	{
+		switch ($layanan) {
+			case 'pengaduan':
+				return 'A';
+				break;
+			case 'pendaftaran':
+				return 'B';
+				break;
+			case 'produk':
+				return 'C';
+				break;
+			case 'ecourt':
+				return 'D';
+				break;
+			case 'kasir':
+				return 'E';
+				break;
+			case 'posbakum':
+				return 'F';
+				break;
+			case 'bank':
+				return 'G';
+				break;
+			case 'pos':
+				return 'H';
+				break;
+			default:
+				return 'Z';
+				break;
+		}
+	}
 
 	public function getAntrian($ke)
 	{
@@ -148,6 +191,28 @@ class M_antrian extends CI_Model
 
 	public function delete($id)
 	{
-		return $this->db->delete($this->_table,['id' => $id]);
+		$this->db->set('status','kelar');
+		$this->db->where('id',$id);
+		return $this->db->update($this->_table);
+		// $this->config->load('antrian_config',TRUE);
+		// $berurut = $this->config->item('berurut','antrian_config');
+		// if($berurut=='true')
+		// {
+		// 	$this->db->set('status','kelar');
+		// 	$this->db->where('id',$id);
+		// 	return $this->db->update($this->_table);
+		// }
+		// else
+		// {
+		// 	return $this->db->delete($this->_table,['id' => $id]);
+		// }
+	}
+
+	public function getStatistik()
+	{
+		$bulan = date('n');
+		$statement = "SELECT COUNT(id) AS total, DATE_FORMAT(tanggal,'%e') AS tanggal FROM antrian WHERE MONTH(tanggal) = '$bulan' GROUP BY tanggal";
+		$query = $this->db->query($statement);
+		return $query->result();
 	}
 }

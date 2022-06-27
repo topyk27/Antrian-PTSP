@@ -6,9 +6,24 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a href="<?php echo base_url(); ?>" class="nav-link">Home</a>
         </li>
+        <?php if($this->session->userdata('role')!='admin'): ?>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?php echo base_url('antrian'); ?>" class="nav-link">Antrian</a>
+            <a href="<?php echo base_url('antrian/layanan/'.$this->session->userdata('layanan')); ?>" class="nav-link">Antrian</a>
         </li>
+        <?php endif; ?>
+        <?php if($this->session->userdata('role')=='admin'): ?>
+        <li class="nav-item dropdown">
+          <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Pengaturan</a>
+          <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+            <li>
+              <a href="<?php echo base_url("setting/user"); ?>" class="dropdown-item">Pengguna</a>
+            </li>
+            <li>
+              <a href="<?php echo base_url("setting/sistem"); ?>" class="dropdown-item">Sistem</a>
+            </li>
+          </ul>
+        </li>
+        <?php endif; ?>
     </ul>
 
     <!-- Right navbar links -->

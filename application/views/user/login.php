@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Tamu PTSP | Login</title>
+	<title>Antrian PTSP | Login</title>
+	<link rel="icon" type="image/png" href="<?php echo base_url('asset/img/icon.png'); ?>">
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
@@ -18,7 +19,7 @@
 	<div class="login-box">
 		<div class="card card-outline card-primary">
 			<div class="card-header text-center">
-				<a href="<?php echo base_url(); ?>" class="h1"><b>PTSP</b></a>
+				<a href="<?php echo base_url(); ?>" class="h1"><b>Antrian PTSP</b></a>
 			</div>
 			<div class="card-body">
 				<p class="login-box-msg"><b>P</b>elayanan <b>T</b>erpadu <b>S</b>atu <b>P</b>intu</p>

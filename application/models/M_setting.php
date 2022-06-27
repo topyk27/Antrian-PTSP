@@ -58,5 +58,14 @@ class M_setting extends CI_Model
 			return FALSE;
 		}
 	}
+
+	public function save_text($val)
+	{
+		$post = $this->input->post();
+		$data = $post['data'];
+		$statement = "UPDATE setting SET $val='$data' ";
+		$this->db->query($statement);
+		return $this->db->affected_rows();
+	}
 }
  ?>

@@ -30,7 +30,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary"><i class="fas fa-bullhorn"></i> Pengumuman</button>
+                            <button type="button" class="btn btn-primary" id="btn_pengumuman"><i class="fas fa-bullhorn"></i> Pengumuman</button>
                         </div>
                     </div>
                     <div class="row mb-2">
@@ -47,7 +47,7 @@
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>#</th>
+                                            <!-- <th>#</th> -->
                                             <th>Antrian</th>
                                             <th>Status</th>
                                             <th>Panggil</th>
@@ -70,28 +70,60 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <?php
+                $this->config->load('antrian_config',TRUE);
+                $berurut = $this->config->item('berurut','antrian_config');
+                if($berurut=='false') :
+                ?>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="ke">Arahkan ke :</label>
                         <select name="ke" id="ke" class="form-control <?php echo form_error('layanan') ? 'is-invalid' : '' ?>">
-                            <?php foreach ($data_layanan as $key => $val) : ?>
-                                <option value="<?php echo ($val->ke); ?>"><?php echo $val->nama_layanan; ?></option>
-                            <?php endforeach; ?>
+                            
                         </select>
                         <div class="invalid-feedback">
                             <?php echo form_error('layanan'); ?>
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
                 <div class="modal-footer justify-content-between">
+                    <?php if($berurut=='false'): ?>
                     <button id="btn_arahkan" type="button" class="btn btn-primary" onclick="arahkan()">Arahkan</button>
+                    <?php endif; ?>
                     <button id="btn_tunda" type="button" class="btn btn-warning" onclick="tunda()">Tunda</button>
+                    <button type="button" class="btn btn-success" onclick="panggil_lagi()">Panggil</button>
                     <button id="btn_hapus" type="button" class="btn btn-danger" onclick="hapus()">Hapus</button>
                 </div>
             </div>
         </div>
     </div>
+    <div id="pengumumanModal" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<div class="icon-box">
+						<i class="material-icons">campaign</i>
+					</div>
+					<h4 class="modal-title w-100">Umumkan</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<textarea id="text_pengumuman" rows="3" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer justify-content-center">
+					<button type="button" class="btn btn-success" data-dismiss="modal" id="modal_pengumuman">Umumkan</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+				</div>
+			</div>
+		</div>
+	</div>
     <?php $this->load->view("_partials/loader.php") ?>
     <!-- jQuery -->
     <script src="<?php echo base_url('asset/js/jquery/jquery.min.js') ?>"></script>
@@ -106,18 +138,22 @@
     <script src="<?php echo base_url('asset/plugin/datatables-responsive/js/responsive.bootstrap4.min.js') ?>"></script>
     <script>
         const base_url = "<?php echo base_url(); ?>";
-        const layanan = "<?php echo $this->session->userdata('layanan'); ?>"
-        const nama_layanan = "<?php echo $this->session->userdata('nama_layanan'); ?>"
+        const layanan = "<?php echo $this->session->userdata('layanan'); ?>";
+        const nama_layanan = "<?php echo $this->session->userdata('nama_layanan'); ?>";
+        const kode = "<?php echo $this->session->userdata('kode'); ?>";        
+        var berurut = <?php echo $berurut; ?>;
     </script>
     <script>
         var dt_antrian;
         var nomor_dipanggil;
+        var nomor_dipanggil_tanpa_kode;
         var id_dipanggil;
         $(document).ready(function() {
             $("#sidebar_antrian").addClass("active");
             dt_antrian = $("#dt_antrian").DataTable({
                 dom: 'Bfrtip',
                 ordering: false,
+                searching: false,
                 ajax: {
                     url: base_url + 'antrian/antrian/' + layanan,
                     dataSrc: "",
@@ -125,15 +161,19 @@
                 columns: [{
                         data: 'id'
                     },
+                    // {
+                    //     data: null,
+                    //     "sortable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return meta.row + meta.settings._iDisplayStart + 1;
+                    //     }
+                    // },
                     {
-                        data: null,
-                        "sortable": false,
-                        render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
+                        data: null, sortable: false, render: function(data,type,row,meta)
+                        {
+                            return berurut ? kode+row['no'] : row['no'];
+
                         }
-                    },
-                    {
-                        data: 'no', sortable: false,
                     },
                     {
                         data: 'status', sortable: false,
@@ -159,9 +199,59 @@
                 responsive: true,
                 autoWidth: false,
             });
+            
+            setInterval(() => {
+                dt_antrian.ajax.reload(null,false);
+            }, 5000);
+            // pengumuman
+            $("#btn_pengumuman").click(function() {
+                $("#pengumumanModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            });
+            $("#modal_pengumuman").click(function(){
+                pengumuman = $("#text_pengumuman").val();
+                $.ajax({
+                    type: 'post',
+                    url: base_url+"antrian/panggil",
+                    data: {
+                        no: 0,
+                        layanan: 'pengumuman',
+                        pengumuman: pengumuman
+                    },
+                    dataType: 'json',
+                    beforeSend: function()
+                    {
+                        console.log('beforesend');
+                        $('.loader2').show();
+                    },
+                    success: function(respon)
+                    {
+                        if(respon.success == 1)
+                        {                        
+                            cek_panggilan_pengumuman(respon.id);                            
+                        }
+                        else
+                        {
+                            $(".loader2").hide();
+                            alert("gagal memanggil, silahkan coba lagi");
+                        }
+                    },
+                    error: function(err)
+                    {
+                        console.log(err.responseText);
+                        $(".loader2").hide();
+                        alert("gagal memanggil, silahkan coba lagi");
+                    }
+                });
+            });
+            // end pengumuman
         });
 
         function panggil(id, no) {
+            nomor_dipanggil_tanpa_kode = no;
+            no = berurut ? kode+no : no;
             $.ajax({
                 type: 'post',
                 url: base_url + 'antrian/panggil',
@@ -178,7 +268,9 @@
                     if (respon.success == 1) {
                         nomor_dipanggil = no;
                         id_dipanggil = id;
-                        cek_panggilan(respon.id);
+                        cek_panggilan(respon.id);                        
+                        console.log('nomor dipanggil = ' +nomor_dipanggil);
+                        console.log('id_dipanggil = ' +id_dipanggil);
                     } else {
                         $(".loader2").hide();
                         alert("gagal memanggil, silahkan coba lagi");
@@ -190,6 +282,11 @@
                     alert("gagal memanggil, silahkan coba lagi");
                 }
             });
+        }
+
+        function panggil_lagi()
+        {
+            panggil(id_dipanggil,nomor_dipanggil_tanpa_kode);
         }
 
         function cek_panggilan(id) {
@@ -214,7 +311,14 @@
                             backdrop: 'static',
                             keyboard: false
                         });
-                        ke();
+                        if(berurut==false)
+                        {
+                            ke();
+                        }
+                        else
+                        {
+                            $(".loader2").hide();
+                        }
                     } else {
                         setTimeout(() => {
                             cek_panggilan(id);
@@ -224,6 +328,34 @@
             });
         }
 
+        function cek_panggilan_pengumuman(id)
+        {
+            let terpanggil = false;
+            $.ajax({
+                type: 'post',
+                url: base_url + 'antrian/cek_panggilan',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(respon) {
+                    if (respon.efek != 1) {
+                        terpanggil = true;
+                    }
+                },
+                complete: function() {
+                    if (terpanggil) {
+                        $(".loader2").hide();                        
+                    } else {
+                        setTimeout(() => {
+                            cek_panggilan_pengumuman(id);
+                        }, 3000);
+                    }
+                }
+            });
+
+        }
+
         function ke() {
             let opt_ke = $("#ke");
             $.ajax({
@@ -231,6 +363,7 @@
                 url: base_url + 'setting/data_layanan',
                 dataType: 'json',
                 success: function(data) {
+                    $("#ke").empty();
                     for (let i = 0; i < data.length; i++) {
                         let obj = data[i];
                         $("#ke").append("<option value=" + obj.layanan + ">" + obj.nama_layanan + "</option>");

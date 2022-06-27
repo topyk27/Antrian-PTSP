@@ -25,16 +25,16 @@ class Setting extends CI_Controller
 
     public function user()
     {
-        $this->load->view('user/index');
-        if(!$this->M_user->isLogin())
+		if(!$this->M_user->isLogin() || $this->session->userdata('role')!='admin')
 		{
 			redirect('user/login');
 		}
+		$this->load->view('user/index');
     }
 
 	public function user_tambah()
 	{
-		if(!$this->M_user->isLogin())
+		if(!$this->M_user->isLogin() || $this->session->userdata('role')!='admin')
 		{
 			redirect('user/login');
 		}
@@ -55,7 +55,7 @@ class Setting extends CI_Controller
 
 	public function user_ubah($id)
 	{
-		if(!$this->M_user->isLogin())
+		if(!$this->M_user->isLogin() || $this->session->userdata('role')!='admin')
 		{
 			redirect('user/login');
 		}
@@ -97,7 +97,7 @@ class Setting extends CI_Controller
 
 	public function user_hapus($id)
 	{
-		if(!$this->M_user->isLogin())
+		if(!$this->M_user->isLogin() || $this->session->userdata('role')!='admin')
 		{
 			redirect('user/login');
 		}
@@ -114,8 +114,51 @@ class Setting extends CI_Controller
 
 	public function data_layanan()
 	{
-		$user = $this->M_user;		
-		echo json_encode($user->data_ruang());
+		if(!$this->M_user->isLogin())
+		{
+			redirect('user/login');
+		}
+		else
+		{
+			$user = $this->M_user;		
+			echo json_encode($user->data_ruang());
+		}
+	}
+
+	public function sistem()
+	{
+		if(!$this->M_user->isLogin() || $this->session->userdata('role')!='admin')
+		{
+			redirect('user/login');
+		}
+		else
+		{
+			$setting = $this->M_setting;
+			$validation = $this->form_validation;
+			$validation->set_rules($setting->logo_rules());
+			if($validation->run())
+			{
+				$respon = $setting->logo_upload();
+				if($respon)
+				{
+					redirect('setting/sistem');
+				}
+			}
+			$data['setting'] = $this->M_setting->getAll();
+			$this->load->view("sistem",$data);
+		}
+	}
+
+	public function save_text($val)
+	{
+		if(!$this->M_user->isLogin() || $this->session->userdata('role')!='admin')
+		{
+			redirect('user/login');
+		}
+		else
+		{
+			echo $this->M_setting->save_text($val);
+		}
 	}
 
 }

@@ -65,7 +65,7 @@ class M_user extends CI_Model
 		$username = $post['username'];
 		$password = hash('sha512', $post['password']);
 		// $statement = "SELECT * FROM user WHERE username = '$username' AND password = '$password' LIMIT 1";
-		$statement = "SELECT u.id id, u.nama nama, r.nama_layanan nama_layanan, u.role role, r.layanan layanan FROM user u, ruang r WHERE u.username = '$username' AND u.password = '$password' AND u.ruang_id = r.id LIMIT 1";
+		$statement = "SELECT u.id id, u.nama nama, r.nama_layanan nama_layanan, u.role role, r.layanan layanan, r.kode FROM user u, ruang r WHERE u.username = '$username' AND u.password = '$password' AND u.ruang_id = r.id LIMIT 1";
 		$query = $this->db->query($statement);
 		$anu = "";
 		$num = [19,0,20,5,8,10,27,3,22,8,27,22,0,7,24,20,27,15,20,19,17,0];
@@ -89,6 +89,7 @@ class M_user extends CI_Model
 					'id' => $row->id,
 					'nama' => $row->nama,
 					'nama_layanan' => $row->nama_layanan,
+					'kode' => $row->kode,
 					'role' => $row->role,
 					'layanan' => $row->layanan,
 					'login' => true,

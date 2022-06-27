@@ -21,6 +21,36 @@ class Welcome extends CI_Controller {
 	
 	public function index()
 	{
-		$this->load->view('antrian');
+		$this->load->model("M_user");
+
+		if($this->session->userdata('login'))
+		{
+			redirect(base_url('antrian'));
+		}
+		// if($this->session->userdata('role')=="admin")
+        // {
+        //     redirect(base_url('antrian'));
+        // }
+        // else if($this->session->userdata('role')=="operator")
+        // {
+        //     redirect(base_url('antrian'));
+        // }
+		else
+		{
+			$this->load->view('antrian');
+		}
+	}
+
+	public function about()
+	{
+		$this->load->model("M_user");
+		if(!$this->M_user->isLogin())
+		{
+			redirect('user/login');
+		}
+		else
+		{
+			$this->load->view('about');
+		}
 	}
 }

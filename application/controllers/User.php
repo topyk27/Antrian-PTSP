@@ -12,14 +12,10 @@ class User extends CI_Controller
 
     public function index()
     {
-        if($this->session->userdata('role')=="admin")
+        if($this->M_user->isLogin())
         {
-            redirect(base_url('setting/user'));
-        }
-        else if($this->session->userdata('role')=="operator")
-        {
-            redirect(base_url('antrian'));
-        }
+                redirect(base_url('antrian'));
+        }        
         else
         {
             redirect(base_url('user/login'));

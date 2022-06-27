@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Antrian PTSP</title>
+    <link rel="icon" type="image/png" href="<?php echo base_url('asset/img/icon.png'); ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/dist/css/adminlte.min.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/css/fontawesome-free/css/all.min.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/loader.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/antrian.css') ?>">
+    <style>.rvNotification{position:fixed;background-color:#fff;text-align:center;font-family:-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-weight:400;line-height:1.5;box-shadow:0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);z-index:10000;width:100vw;left:0;bottom:0;font-size:1rem;padding-bottom:.5em;padding-right:.5em}.rvButtonRow{padding-right:2em;padding-bottom:1em;text-align:right;font-size:medium}.rvButton{cursor:pointer;display:inline-block;margin-left:1em;padding:.8em 2em;border-radius:3px;font-size:small}.rvButtonAllow{border:none;background-color:#2b8cff;color:#fff}.rvButtonDeny{border:1px solid #2b8cff;color:#2b8cff;background-color:#fff}.rvTextRow{padding-top:1em;padding-bottom:2em}@media (min-width:576px){.rvNotification{width:60vw;left:20vw}}@media (min-width:768px){.rvNotification{width:50vw;left:25vw}}@media (min-width:992px){.rvNotification{width:40vw;left:30vw}}@media (min-width:1200px){.rvNotification{width:30vw;left:35vw}}</style>
 </head>
 
 <body>
@@ -66,7 +68,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card">
                         <div class="circle satu">
                             <h2>Pengaduan<br>dan<br>Informasi</h2>
@@ -82,7 +84,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card">
                         <div class="circle dua">
                             <h2>Pengambilan Produk</h2>
@@ -99,7 +101,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card">
                         <div class="circle tiga">
                             <h2>E-Court</h2>
@@ -115,7 +117,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <!-- kalo mau pakai kasir -->
+                <!-- <div class="col-md-3">
                     <div class="card">
                         <div class="circle empat">
                             <h2>Kasir</h2>
@@ -131,7 +134,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- modal -->
@@ -155,19 +158,46 @@
         <!-- loader -->
         <?php $this->load->view("_partials/loader.php") ?>
         <!-- end loader -->
+        <div class="rvNotification"><div class="rvTextRow"><strong>Enable</strong> audio</div><div class="rvButtonRow"><div onclick="hilangkan();" class="rvButton rvButtonAllow">ALLOW</div></div></div>
     </div>
     <!-- jQuery -->
     <script src="<?php echo base_url('asset/js/jquery/jquery.min.js') ?>"></script>
     <!-- Bootstrap 4 -->
     <script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
     <!-- mine -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=6UoEN13s"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=0xxfQe7z"></script>
     <script src="<?php echo base_url('asset/mine/js/jam.js') ?>"></script>
-    <script type="text/javascript">
+    <script>
+        <?php
+            $this->config->load('antrian_config',TRUE);
+            $rsvc = $this->config->item('rsvc','antrian_config');
+            $berurut = $this->config->item('berurut','antrian_config');
+        ?>        
+        var rsvc = <?php echo $rsvc; ?>;
+        var berurut = <?php echo $berurut; ?>;
         const base_url = "<?php echo base_url(); ?>";
         const print = false;
         const voice = "Indonesian Male";
-
+    </script>
+    <script type="text/javascript">
+        var msg = new SpeechSynthesisUtterance();
+        var suara;
+        var myTimeout;
+        function myTimer()
+        {
+            speechSynthesis.pause();
+            speechSynthesis.resume();
+            myTimeout = setTimeout(myTimer, 10000);
+        }
+        if(rsvc==false)
+        {
+            setTimeout(() => {		
+                suara = window.speechSynthesis.getVoices();		
+                msg.voice = suara[11];	
+                msg.lang = 'in-ID';
+                msg.rate = 0.9;		
+            }, 1000);
+        }
         function ambil_antrian(kode) {
             $.ajax({
                 type: 'get',
@@ -278,13 +308,29 @@
             {
                 text = "Dipanggil nomor antrian " + no + ". Silahkan ke layanan " + layanan;
             }
-            responsiveVoice.speak(text,voice, {
-                rate: 0.9, onend: function(){
-                    setTimeout(function(){
-                        responsiveVoice.speak(text,voice, {rate: 0.9, onend: hapus_panggil_antrian(id)});
-                    },2000);
+            if(rsvc != false)
+            {
+                responsiveVoice.speak(text,voice, {rate: 0.9, onend: function(){
+                    hapus_panggil_antrian(id)
+                }});
+            }
+            else
+            {
+                myTimeout = setTimeout(myTimer, 10000);
+                msg.text = text;
+                msg.onend = function()
+                {
+                    hapus_panggil_antrian(id);
                 }
-            });
+                speechSynthesis.speak(msg);
+            }
+            // responsiveVoice.speak(text,voice, {
+            //     rate: 0.9, onend: function(){
+            //         setTimeout(function(){
+            //             responsiveVoice.speak(text,voice, {rate: 0.9, onend: hapus_panggil_antrian(id)});
+            //         },2000);
+            //     }
+            // });
         }
 
         function hapus_panggil_antrian(id)
@@ -298,21 +344,26 @@
                 {
                     if(respon.success==1)
                     {
-
+                        setTimeout(cek_panggil,3000);
                     }
                 },
                 complete: function()
                 {
-                    setTimeout(cek_panggil,7000);
+                    // setTimeout(cek_panggil,7000);
                 }
             });
         }
+        function hilangkan()
+        {
+            cek_panggil();
+            $('.rvNotification').remove();
+        }
 
         $(document).ready(function(){
-            if(confirm('pencet ok'))
-            {
-                cek_panggil();
-            }
+            // if(confirm('pencet ok'))
+            // {
+            //     cek_panggil();
+            // }
         });
     </script>
 </body>

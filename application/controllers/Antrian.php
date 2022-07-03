@@ -16,8 +16,8 @@ class Antrian extends CI_Controller
 	public function monitor()
 	{
 		$this->load->model("M_setting");
-		$data['setting'] = $this->M_setting->getAll();
-		$this->load->view('monitor',$data);
+		$data['setting'] = $this->M_setting->getAll();		
+		$this->load->view('monitor',$data);		
 	}
 
     public function tambah($layanan)
@@ -107,6 +107,9 @@ class Antrian extends CI_Controller
 
     public function cetak()
     {
+		$this->load->model("M_setting");
+		$data = $this->M_setting->getAll();
+		$nama_pa = $data->nama_pa;
         $tanggal = date("d-m-Y");
 		$jam = date("H:i:s");
 		$var_magin_left = 0;

@@ -161,5 +161,23 @@ class Setting extends CI_Controller
 		}
 	}
 
+	public function awal()
+	{
+		$this->session->sess_destroy();
+		$this->load->view("awal");
+	}
+
+	public function savetoken()
+	{
+		echo $this->M_setting->savetoken();
+	}
+
+	public function get_jam_tutup()
+	{
+		// echo json_encode($this->M_setting->get_jam_tutup());
+		echo $this->M_setting->get_jam_tutup();
+	}
+	
+
 }
  ?>

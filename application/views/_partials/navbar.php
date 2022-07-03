@@ -63,9 +63,9 @@
   </div>
 </div>
 <script>
-    function modal_logout()
-    {
-      $("#modal-logout").modal('show');
-    }
-    document.getElementById('btn-logout').onclick=modal_logout; 
-  </script>
+  function modal_logout()
+  {
+    $("#modal-logout").modal('show');
+  }
+  document.getElementById('btn-logout').onclick=modal_logout; 
+</script>

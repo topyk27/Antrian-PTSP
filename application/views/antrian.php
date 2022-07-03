@@ -14,7 +14,7 @@
     <style>.rvNotification{position:fixed;background-color:#fff;text-align:center;font-family:-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-weight:400;line-height:1.5;box-shadow:0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);z-index:10000;width:100vw;left:0;bottom:0;font-size:1rem;padding-bottom:.5em;padding-right:.5em}.rvButtonRow{padding-right:2em;padding-bottom:1em;text-align:right;font-size:medium}.rvButton{cursor:pointer;display:inline-block;margin-left:1em;padding:.8em 2em;border-radius:3px;font-size:small}.rvButtonAllow{border:none;background-color:#2b8cff;color:#fff}.rvButtonDeny{border:1px solid #2b8cff;color:#2b8cff;background-color:#fff}.rvTextRow{padding-top:1em;padding-bottom:2em}@media (min-width:576px){.rvNotification{width:60vw;left:20vw}}@media (min-width:768px){.rvNotification{width:50vw;left:25vw}}@media (min-width:992px){.rvNotification{width:40vw;left:30vw}}@media (min-width:1200px){.rvNotification{width:30vw;left:35vw}}</style>
 </head>
 
-<body>
+<body onload="load_tutup();">
     <div class="wrapper">
         <div class="container">
             <div class="row mb-2">
@@ -25,21 +25,26 @@
                                 <img src="<?php echo base_url('asset/img/logo.png'); ?>" class="img-fluid logo">
                             </div>
                             <div class="col-md-10">
-                                <h2>PENGADILAN AGAMA TENGGARONG</h2>
-                                <h5>Jalan Pesut, Kelurahan Timbau, Kecamatan Tenggarong Kabupaten Kutai Kartanegara, Kalimantan Timur 75511</h5>
+                                <h2>PENGADILAN AGAMA <span class="text-uppercase"><?php echo $setting->nama_pa; ?></span></h2>
+                                <h5><?php echo $setting->alamat; ?></h5>
                                 <div class="row">
+                                    <?php if(!empty($setting->telepon)) : ?>
                                     <div class="col-md-3">
-                                        <span><i class="fas fa-phone"></i> 0541-6667063 </span>
+                                        <span><i class="fas fa-phone"></i> <?php echo $setting->telepon; ?> </span>
                                     </div>
+                                    <?php endif; if(!empty($setting->facebook)) : ?>
                                     <div class="col-md-3">
-                                        <span><i class="fab fa-facebook"></i> PA Tenggarong </span>
+                                        <span><i class="fab fa-facebook"></i> <?php echo $setting->facebook; ?> </span>
                                     </div>
+                                    <?php endif; if(!empty($setting->instagram)) : ?>
                                     <div class="col-md-3">
-                                        <span><i class="fab fa-instagram"></i> pa_tenggarong </span>
+                                        <span><i class="fab fa-instagram"></i> <?php echo $setting->instagram; ?> </span>
                                     </div>
+                                    <?php endif; if(!empty($setting->twitter)) : ?>
                                     <div class="col-md-3">
-                                        <span><i class="fab fa-twitter"></i> PaTenggarong </span>
+                                        <span><i class="fab fa-twitter"></i> <?php echo $setting->twitter; ?> </span>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                                 <!-- <span><i class="fab fa-youtube"></i> Pengadilan Agama Tenggarong </span> -->
                             </div>
@@ -172,200 +177,16 @@
             $this->config->load('antrian_config',TRUE);
             $rsvc = $this->config->item('rsvc','antrian_config');
             $berurut = $this->config->item('berurut','antrian_config');
+            $print = $this->config->item('print','antrian_config');
         ?>        
         var rsvc = <?php echo $rsvc; ?>;
         var berurut = <?php echo $berurut; ?>;
         const base_url = "<?php echo base_url(); ?>";
-        const print = false;
+        const print = <?php echo $print; ?>;
         const voice = "Indonesian Male";
+        
     </script>
-    <script type="text/javascript">
-        var msg = new SpeechSynthesisUtterance();
-        var suara;
-        var myTimeout;
-        function myTimer()
-        {
-            speechSynthesis.pause();
-            speechSynthesis.resume();
-            myTimeout = setTimeout(myTimer, 10000);
-        }
-        if(rsvc==false)
-        {
-            setTimeout(() => {		
-                suara = window.speechSynthesis.getVoices();		
-                msg.voice = suara[11];	
-                msg.lang = 'in-ID';
-                msg.rate = 0.9;		
-            }, 1000);
-        }
-        function ambil_antrian(kode) {
-            $.ajax({
-                type: 'get',
-                url: base_url + "antrian/tambah/" + kode,
-                dataType: 'json',
-                beforeSend: function() {
-                    console.log("before send");
-                    $(".loader2").show();
-                },
-                success: function(data) {
-                    
-                    if (data.success != 1) {
-                        alert("gagal ambil nomor antrian");
-                    } else {
-                        if (print) {
-                            console.log("jalankan fungsi cetak");
-                            cetak(data.no);
-                        } else {
-                            $(".loader2").hide();
-                            $(".modal-title").text("Nomor antrian anda " + data.no);
-                            $("#modal").modal('show');
-                            setTimeout(() => {
-                                $("#modal").modal('hide');
-                            }, 5000);
-                        }
-                    }
-                },
-                error: function(err) {
-                    console.log(err.responseText);
-                    alert("ada kesalahan, harap refresh halaman");
-                },
-                complete: function() {
-                    // $("#modal").modal('hide');
-                }
-            });
-        }
-
-        function cetak(no) {
-            $.ajax({
-                type: 'POST',
-                url: base_url + "antrian/cetak",
-                data: {
-                    no: no
-                },
-                dataType: 'json',
-                beforeSend: function() {
-                    console.log("nomor " + no);
-                },
-                success: function(respon) {
-                    console.log(respon);
-                    if (respon.success == 1) {
-                        console.log("berhasil kirim data ke printer");
-                    } else {
-                        alert("gagal kirim data ke printer");
-                    }
-                },
-                error: function(err, jqXHR, exception) {
-                    console.log(err);
-                    console.log(jqXHR.status);
-                    console.log(exception);
-                    console.log(err.responseText);
-                },
-                complete: function() {
-                    $(".loader2").hide();
-                    $(".modal-title").text("Nomor antrian anda " + no);
-                    $("#modal").modal('show');
-                    setTimeout(() => {
-                        $("#modal").modal('hide');
-                    }, 5000);
-                }
-            });
-        }
-
-        function cek_panggil()
-        {
-            $.ajax({
-                type: 'get',
-                url: base_url+'antrian/panggil_antrian',
-                dataType: 'json',
-                success: function(respon)
-                {
-                    if(respon.success==1)
-                    {
-                        memanggil_antrian(respon.id,respon.no,respon.layanan,respon.pengumuman);
-                    }
-                    else
-                    {
-                        setTimeout(() => {
-                            cek_panggil();
-                        }, 3000);
-                    }
-                },
-                error: function(err)
-                {
-                    console.log(err.responseText);
-                }
-            });
-        }
-
-        function memanggil_antrian(id,no,layanan,pengumuman)
-        {
-            let text;
-            if(pengumuman != null)
-            {
-                text = pengumuman;
-            }
-            else
-            {
-                text = "Dipanggil nomor antrian " + no + ". Silahkan ke layanan " + layanan;
-            }
-            if(rsvc != false)
-            {
-                responsiveVoice.speak(text,voice, {rate: 0.9, onend: function(){
-                    hapus_panggil_antrian(id)
-                }});
-            }
-            else
-            {
-                myTimeout = setTimeout(myTimer, 10000);
-                msg.text = text;
-                msg.onend = function()
-                {
-                    hapus_panggil_antrian(id);
-                }
-                speechSynthesis.speak(msg);
-            }
-            // responsiveVoice.speak(text,voice, {
-            //     rate: 0.9, onend: function(){
-            //         setTimeout(function(){
-            //             responsiveVoice.speak(text,voice, {rate: 0.9, onend: hapus_panggil_antrian(id)});
-            //         },2000);
-            //     }
-            // });
-        }
-
-        function hapus_panggil_antrian(id)
-        {
-            $.ajax({
-                type: 'post',
-                url: base_url+'antrian/hapus_panggil_antrian',
-                data: {id:id},
-                dataType: 'json',
-                success: function(respon)
-                {
-                    if(respon.success==1)
-                    {
-                        setTimeout(cek_panggil,3000);
-                    }
-                },
-                complete: function()
-                {
-                    // setTimeout(cek_panggil,7000);
-                }
-            });
-        }
-        function hilangkan()
-        {
-            cek_panggil();
-            $('.rvNotification').remove();
-        }
-
-        $(document).ready(function(){
-            // if(confirm('pencet ok'))
-            // {
-            //     cek_panggil();
-            // }
-        });
-    </script>
+    <script src="<?php echo base_url('asset/mine/js/antrian.js'); ?>"></script>
 </body>
 
 </html>

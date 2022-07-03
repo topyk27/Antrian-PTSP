@@ -5,7 +5,7 @@ $config['version']='1.0.0';
 $config['panggil']= 'luar'; // luar | pc
 //luar = pc monitor yang berbunyi
 //pc = pc ruang yang berbunyi
-$config['berurut']='false';
+$config['berurut']='true';
 $config['rsvc']='true';
 $config['print']='true'; //true | false
 //print not tested

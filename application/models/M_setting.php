@@ -21,13 +21,18 @@ class M_setting extends CI_Model
 		$this->db->from($this->table);
 		return $this->db->get()->row();
 	}
+
+	public function get_jam_tutup()
+	{
+		$this->db->from($this->table);
+		return $this->db->get()->row()->jam_tutup;
+	}
     public function savetoken()
 	{
 		$post = $this->input->post();
 		$token = $post['token'];
 		$nama_pa = $post['nama_pa'];
-		$nama_pa_pendek = $post['nama_pa_pendek'];
-		// $this->db->truncate("setting");
+		$nama_pa_pendek = $post['nama_pa_pendek'];		
 		$statement1 = "TRUNCATE setting";
 		$this->db->query($statement1);
 		$statement = "INSERT INTO setting (token, nama_pa, nama_pa_pendek) VALUES ('$token', '$nama_pa', '$nama_pa_pendek') ";

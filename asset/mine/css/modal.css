@@ -76,3 +76,8 @@
 .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
 	background: #ee3535;
 }
+
+.prioritas {
+	background-color: #60c7c1;
+	color: #fff;
+}

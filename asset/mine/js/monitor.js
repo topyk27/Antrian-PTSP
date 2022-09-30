@@ -14,7 +14,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data: "layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,
@@ -30,7 +42,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data:"layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,
@@ -46,7 +70,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data:"layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,
@@ -62,7 +98,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data:"layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,
@@ -78,7 +126,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data:"layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,
@@ -94,7 +154,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data:"layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,
@@ -110,7 +182,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data:"layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,
@@ -126,7 +210,19 @@ $(document).ready(function(){
         },
         columns: [{
             data: "no"
-        }],
+        },{data:"layanan"}],
+        columnDefs: [
+            {
+                targets: 1,
+                visible: false,
+            }
+        ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+            }            
+        },
         paging: false,
         ordering: false,
         info: false,

@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="circle satu">
                             <h2>Pengaduan<br>dan<br>Informasi</h2>
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="circle dua">
                             <h2>Pengambilan Produk</h2>
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="circle tiga">
                             <h2>E-Court</h2>
@@ -118,6 +118,24 @@
                             </ul>
                             <div class="text-center button">
                                 <a href="#" onclick="ambil_antrian('ecourt');">Ambil Antrian</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="circle empat">
+                            <h2>Prioritas<br>Kaum Rentan</h2>
+                        </div>
+                        <div class="content empat">                            
+                            <ul>                                
+                                <li>Disabilitas</li>
+                                <li>Wanita Hamil</li>
+                                <li>Ibu Menyusui</li>                                
+                                <li>Lansia</li>
+                            </ul>
+                            <div class="text-center button">
+                                <a href="#" onclick="ambil_antrian('prioritas');">Ambil Antrian</a>
                             </div>
                         </div>
                     </div>
@@ -171,7 +189,7 @@
     <script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
     <!-- mine -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=0xxfQe7z"></script>
-    <script src="<?php echo base_url('asset/mine/js/jam.js') ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/jam.js?'); ?>"></script>
     <script>
         <?php
             $this->config->load('antrian_config',TRUE);
@@ -186,7 +204,7 @@
         const voice = "Indonesian Male";
         
     </script>
-    <script src="<?php echo base_url('asset/mine/js/antrian.js'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/antrian.js?'); ?>"></script>
 </body>
 
 </html>

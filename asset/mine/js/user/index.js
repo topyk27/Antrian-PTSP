@@ -39,7 +39,7 @@ $(document).ready(function(){
             {data: "nama"},
             {data: "nama_layanan"},
             {data: null, "sortable" : false, render: function(data,type,row,meta){                
-                return "<a href='"+base_url+"setting/user/ubah/"+row['id']+"' class='btn btn-warning'><i class='fas fa-edit'></i>Ubah</a>";                
+                return "<a href='"+base_url+"setting/user_ubah/"+row['id']+"' class='btn btn-warning'><i class='fas fa-edit'></i>Ubah</a>";                
             }},
             {data: null, "sortable" : false, render: function(data,type,row,meta){
                 return "<a href='#' class='btn btn-danger deleteButton'><i class='fas fa-trash'></i>Hapus</a>";

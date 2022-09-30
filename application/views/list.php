@@ -35,7 +35,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-sm-12" id="respon"></div>
-                    </div>
+                    </div>                    
                 </div>
             </section>
             <section class="content">
@@ -50,6 +50,7 @@
                                             <!-- <th>#</th> -->
                                             <th>Antrian</th>
                                             <th>Status</th>
+                                            <th>Layanan</th>
                                             <th>Panggil</th>
                                         </tr>
                                     </thead>
@@ -59,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <?php $this->load->view("_partials/numpang.php") ?>
+                <?php $this->load->view("_partials/numpang.php") ?>                
             </section>
         </div>
         <?php $this->load->view("_partials/footer.php") ?>
@@ -69,7 +70,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"></h4>
+                    <h4 class="modal-title" id="modal-title"></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -124,6 +125,21 @@
 			</div>
 		</div>
 	</div>
+    <div id="toast_ku" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 100px; right: 0;" data-autohide="false">
+        <div class="toast-header">
+            <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+                <rect width="100%" height="100%" fill="#007aff"></rect>
+            </svg>
+            <strong class="mr-auto">Prioritas</strong>
+            <!-- <small class="text-muted">11 mins ago</small> -->
+            <!-- <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button> -->
+        </div>
+        <div class="toast-body">
+            Nomor antrian 1 adalah prioritas, mohon untuk segera dipanggil
+        </div>
+    </div>
     <?php $this->load->view("_partials/loader.php") ?>
     <!-- jQuery -->
     <script src="<?php echo base_url('asset/js/jquery/jquery.min.js') ?>"></script>
@@ -143,7 +159,7 @@
         const kode = "<?php echo $this->session->userdata('kode'); ?>";        
         var berurut = <?php echo $berurut; ?>;
     </script>
-    <script src="<?php echo base_url('asset/mine/js/list.js'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/list.js?'); ?>"></script>
 </body>
 
 </html>

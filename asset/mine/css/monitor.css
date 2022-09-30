@@ -109,3 +109,8 @@ table.dataTable thead th {
         transform: translate(-50%, -45%) scale(0.95);
     }
 }
+
+.prioritas {
+	background-color: #60c7c1;
+	color: #fff;
+}

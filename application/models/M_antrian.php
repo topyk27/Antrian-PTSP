@@ -78,6 +78,9 @@ class M_antrian extends CI_Model
 			case 'pos':
 				return 'H';
 				break;
+			case 'prioritas':
+				return 'P';
+				break;
 			default:
 				return 'Z';
 				break;
@@ -87,7 +90,7 @@ class M_antrian extends CI_Model
 	public function getAntrian($ke)
 	{
 		$tgl = date("Y/m/d");
-		$statement = "SELECT * FROM antrian WHERE tanggal = '".$tgl."' && ke LIKE '".$ke."' && status NOT LIKE 'kelar' ORDER BY diperbarui ASC";
+		$statement = "SELECT id, no, status, layanan FROM antrian WHERE tanggal = '".$tgl."' && ke LIKE '".$ke."' && status NOT LIKE 'kelar' ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";
 		$query = $this->db->query($statement);
 		return $query->result();
 	}

@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitor</title>    
     <link rel="icon" type="image/png" href="<?php echo base_url('asset/img/icon.png'); ?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/dist/css/adminlte.min.css') ?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/css/fontawesome-free/css/all.min.css') ?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/antrian.css') ?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/monitor.css') ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/dist/css/adminlte.min.css'); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/css/fontawesome-free/css/all.min.css'); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/antrian.css'); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/monitor.css?'); ?>">
     
 </head>
 <body>
@@ -76,6 +76,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle satu">Pengaduan dan Informasi</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -87,6 +88,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle dua">Pendaftaran</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -98,6 +100,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle tiga">Pengambilan Produk</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -109,6 +112,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle empat">E-Court</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -122,6 +126,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle lima">Kasir</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -133,6 +138,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle enam">POSBAKUM</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -144,6 +150,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle tujuh">Bank</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -155,6 +162,7 @@
                             <thead>
                                 <tr>
                                     <th class="circle delapan">Pos</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -164,15 +172,15 @@
         </div>
     </div>
     <!-- jQuery -->
-    <script src="<?php echo base_url('asset/js/jquery/jquery.min.js') ?>"></script>
+    <script src="<?php echo base_url('asset/js/jquery/jquery.min.js'); ?>"></script>
     <!-- Bootstrap 4 -->
-    <script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
+    <script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js'); ?>"></script>
     <!-- Datatables -->
-    <script src="<?php echo base_url('asset/plugin/datatables/jquery.dataTables.min.js') ?>"></script>
+    <script src="<?php echo base_url('asset/plugin/datatables/jquery.dataTables.min.js'); ?>"></script>
     <!-- mine -->
-    <script src="<?php echo base_url('asset/mine/js/jam.js') ?>"></script>
-    <script src="<?php echo base_url('asset/mine/js/monitor-cpr.js') ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/jam.js?'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/monitor-cpr.js'); ?>"></script>
     <script>const base_url = "<?php echo base_url(); ?>";</script>    
-    <script src="<?php echo base_url('asset/mine/js/monitor.js'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/monitor.js?'); ?>"></script>
 </body>
 </html>

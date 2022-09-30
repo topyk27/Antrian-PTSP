@@ -2,6 +2,7 @@ var dt_antrian;
 var nomor_dipanggil;
 var nomor_dipanggil_tanpa_kode;
 var id_dipanggil;
+let toast_show = false;
 $(document).ready(function() {
     $("#sidebar_antrian").addClass("active");
     dt_antrian = $("#dt_antrian").DataTable({
@@ -33,23 +34,34 @@ $(document).ready(function() {
                 data: 'status', sortable: false,
             },
             {
+                data: 'layanan'
+            },
+            {
                 data: null,
                 "sortable": false,
                 render: function(data, type, row, meta) {
                     return "<a href='#' onclick='panggil(" + row['id'] + "," + row['no'] + ")' class='btn btn-primary'><i class='fas fa-phone'></i> Panggil</a>";
                 }
             },
-        ],
+        ],        
         columnDefs: [{
-                targets: 0,
+                targets: [0,3],
                 visible: false
             },
             {
                 targets: '_all',
                 className: 'text-center',
                 orderable: false,
-            }
+            }            
         ],
+        createdRow: (row,data,dataIndex,cells) => {
+            if(data.layanan == "prioritas")
+            {
+                $(row).addClass('prioritas');
+                ada_prioritas(data.no);
+            }
+            cek_prioritas();
+        },
         responsive: true,
         autoWidth: false,
     });
@@ -160,7 +172,7 @@ function cek_panggilan(id) {
         complete: function() {
             if (terpanggil) {
                 // $(".loader2").hide();
-                $('.modal-title').text('Nomor Antrian ' + nomor_dipanggil);
+                $('#modal-title').text('Nomor Antrian ' + nomor_dipanggil);
                 $("#modal").modal({
                     backdrop: 'static',
                     keyboard: false
@@ -277,6 +289,7 @@ function arahkan()
             if(respon.success==1)
             {
                 $("#modal").modal('toggle');
+                toast_show = false;
                 dt_antrian.ajax.reload();
                 $("#respon").html("<div class='alert alert-success' role='alert' id='responMsg'><strong>Selamat</strong> Antrian berhasil diarahkan ke "+ke_nama_layanan+"</div>")
     $("#responMsg").hide().fadeIn(200).delay(2000).fadeOut(1000, function(){$(this).remove();});
@@ -314,6 +327,7 @@ function tunda()
             if(respon.success==1)
             {
                 $("#modal").modal('toggle');
+                toast_show = false;
                 dt_antrian.ajax.reload();
                 $("#respon").html("<div class='alert alert-success' role='alert' id='responMsg'><strong>Selamat</strong> Antrian berhasil ditunda</div>")
     $("#responMsg").hide().fadeIn(200).delay(2000).fadeOut(1000, function(){$(this).remove();});
@@ -346,6 +360,7 @@ function hapus()
             if(respon==1)
             {
                 $("#modal").modal('toggle');
+                toast_show = false;
                 dt_antrian.ajax.reload();
                 $("#respon").html("<div class='alert alert-success' role='alert' id='responMsg'><strong>Selamat</strong> Antrian berhasil dihapus</div>")
     $("#responMsg").hide().fadeIn(200).delay(2000).fadeOut(1000, function(){$(this).remove();});
@@ -364,4 +379,20 @@ function hapus()
             $(".loader2").hide();
         }
     });
+}
+
+function ada_prioritas(no) {
+    if(toast_show == false)
+    {
+        $(".toast-body").html(`Nomor antrian <span style="color: red;">${no}</span> adalah prioritas, mohon untuk segera dipanggil`);
+        $('#toast_ku').toast('show');
+        toast_show = true;
+    }
+}
+function cek_prioritas()
+{
+    if(!dt_antrian.rows('.prioritas').any())
+    {
+        $('#toast_ku').toast('hide');
+    }
 }

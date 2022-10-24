@@ -114,7 +114,7 @@ class Antrian extends CI_Controller
 		$jam = date("H:i:s");
 		$var_magin_left = 0;
 		$antrian = $this->input->post('no');
-		$p = printer_open('\\\192.168.2.187\pos58c');
+		$p = printer_open('\\\192.168.2.187\pos-58c');
 		printer_set_option($p, PRINTER_MODE, "RAW"); // mode disobek (gak ngegulung kertas)
 
 

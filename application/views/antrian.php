@@ -189,7 +189,7 @@
     <script src="<?php echo base_url('asset/js/bootstrap/bootstrap.bundle.min.js') ?>"></script>
     <!-- mine -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=0xxfQe7z"></script>
-    <script src="<?php echo base_url('asset/mine/js/jam.js?'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/jam.min.js'); ?>"></script>
     <script>
         <?php
             $this->config->load('antrian_config',TRUE);
@@ -204,7 +204,7 @@
         const voice = "Indonesian Male";
         
     </script>
-    <script src="<?php echo base_url('asset/mine/js/antrian.js?'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/antrian.min.js'); ?>"></script>
 </body>
 
 </html>

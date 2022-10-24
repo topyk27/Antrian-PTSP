@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/dist/css/adminlte.min.css'); ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/css/fontawesome-free/css/all.min.css'); ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/antrian.css'); ?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/monitor.css?'); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('asset/mine/css/monitor.css'); ?>">
     
 </head>
 <body>

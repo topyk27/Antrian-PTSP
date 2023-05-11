@@ -101,6 +101,6 @@
     <script>
         const base_url = "<?php echo base_url(); ?>";
     </script>
-    <script src="<?php echo base_url('asset/mine/js/user/index.js?'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/user/index.js?'.time()); ?>"></script>
 </body>
 </html>

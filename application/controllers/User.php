@@ -52,8 +52,11 @@ class User extends CI_Controller
 
     public function data_user()
 	{
-		$data = $this->M_user->getAll();
-		echo json_encode($data);
+		if($this->M_user->isLogin())
+        {
+            $data = $this->M_user->getAll();
+            echo json_encode($data);
+        }
 	}
 }
  ?>

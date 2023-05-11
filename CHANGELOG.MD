@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.0.0] - 2023-05-11
+###
+- Eksotis, loket informasi pendaftaran pengambilan dan ecourt menjadi satu antrian
+
 ## [1.1.0] - 2022-09-30
 ### Added
 - Antrian prioritas

@@ -204,7 +204,7 @@
         const voice = "Indonesian Male";
         
     </script>
-    <script src="<?php echo base_url('asset/mine/js/antrian.min.js'); ?>"></script>
+    <script src="<?php echo base_url('asset/mine/js/antrian.js?').time(); ?>"></script>
 </body>
 
 </html>

@@ -64,9 +64,20 @@
                                         <div class="form-group">
                                             <label for="layanan">Layanan</label>
                                             <select class="form-control <?php echo form_error('layanan') ? 'is-invalid':'' ?>" name="layanan">
-                                                <?php foreach($data_layanan as $key => $val) : ?>
-                                                    <option value="<?php echo($val->id); ?>" <?php if($user->ruang_id == $val->id) { echo set_select('layanan',$val->id,TRUE); } ?>><?php echo $val->nama_layanan; ?></option>
-                                                <?php endforeach; ?>
+                                                <?php $this->config->load('antrian_config',TRUE); $eksotis = $this->config->item('eksotis', 'antrian_config'); ?>
+                                                <?php if($eksotis=='true') : ?>
+                                                    <option value="1">Loket 1</option>
+                                                    <option value="2">Loket 2</option>
+                                                    <option value="3">Loket 3</option>
+                                                    <option value="4">Loket 4</option>
+                                                    <?php foreach($data_layanan as $key => $val) : ?>
+                                                        <option value="<?php echo($val->nama_layanan); ?>"><?php echo $val->nama_layanan; ?></option>
+                                                    <?php endforeach; ?>
+                                                <?php else : ?>
+                                                    <?php foreach($data_layanan as $key => $val) : ?>
+                                                        <option value="<?php echo($val->id); ?>" <?php if($user->ruang_id == $val->id) { echo set_select('layanan',$val->id,TRUE); } ?>><?php echo $val->nama_layanan; ?></option>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
                                             </select>
                                             <div class="invalid-feedback">
                                                 <?php echo form_error('layanan'); ?>

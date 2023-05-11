@@ -32,7 +32,7 @@ function ambil_antrian(kode) {
             } else {
                 if (print) {
                     // console.log("jalankan fungsi cetak");
-                    cetak(data.no);
+                    cetak(data.no,kode);
                 } else {
                     $(".loader2").hide();
                     // console.log(data.no);
@@ -54,12 +54,33 @@ function ambil_antrian(kode) {
     });
 }
 
-function cetak(no) {
+function cetak(no,kode) {
+    let layanan;
+    switch (kode) {
+        case 'pengaduan':
+            layanan = 'Pengaduan';
+            break;
+        case 'produk':
+            layanan = 'Produk';
+            break;
+        case 'ecourt':
+            layanan = 'E-Court'
+            break;
+        case 'prioritas':
+            layanan = 'Prioritas';
+            break;
+        default:
+            layanan = 'Entahlah';
+            break;
+    }
+    console.log('ini kode : ' + kode);
+    console.log('ini layanan : ' + layanan);
     $.ajax({
         type: 'POST',
         url: base_url + "antrian/cetak",
         data: {
-            no: no
+            no: no,
+            layanan: layanan,
         },
         dataType: 'json',
         beforeSend: function() {
@@ -125,7 +146,7 @@ function memanggil_antrian(id,no,layanan,pengumuman)
     }
     else
     {
-        text = "Dipanggil nomor antrian " + no + ". Silahkan ke layanan " + layanan;
+        text = "Dipanggil nomor antrian " + no + ". Silahkan ke loket " + layanan;
     }
     if(rsvc != false)
     {

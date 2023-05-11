@@ -13,6 +13,7 @@
     <div class="wrapper">
         <?php $this->load->view("_partials/navbar.php") ?>
         <?php $this->load->view("_partials/sidebar_container.php") ?>
+        <?php $this->config->load('antrian_config',TRUE); $eksotis = $this->config->item('eksotis', 'antrian_config'); ?>
         <div class="content-wrapper">
             <section class="content-header">
                 <div class="container-fluid">
@@ -50,6 +51,10 @@
                                             <!-- <th>#</th> -->
                                             <th>Antrian</th>
                                             <th>Status</th>
+                                            <?php if($eksotis == 'true') : ?>
+                                                <th>Catatan</th>
+                                                <th>Ke</th>
+                                            <?php endif; ?>
                                             <th>Layanan</th>
                                             <th>Panggil</th>
                                         </tr>
@@ -90,6 +95,11 @@
                             <?php echo form_error('layanan'); ?>
                         </div>
                     </div>
+                    <?php if($eksotis == 'true') : ?>
+                        <div class="form-group">
+                            <textarea name="alasanTunda" id="alasanTunda" rows="3" class="form-control" placeholder="Silahkan tulis alasan menunda antrian apabila akan ditunda"></textarea>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <?php endif; ?>
                 <div class="modal-footer justify-content-between">
@@ -158,8 +168,14 @@
         const nama_layanan = "<?php echo $this->session->userdata('nama_layanan'); ?>";
         const kode = "<?php echo $this->session->userdata('kode'); ?>";        
         var berurut = <?php echo $berurut; ?>;
+        const eksotis = <?php echo $eksotis ?>;
+        const loket = "<?php echo $this->session->userdata('loket'); ?>";
     </script>
-    <script src="<?php echo base_url('asset/mine/js/list.js?'); ?>"></script>
+    <?php if($eksotis == 'false') : ?>
+    <script src="<?php echo base_url('asset/mine/js/list.js?'.time()); ?>"></script>
+    <?php else : ?>
+    <script src="<?php echo base_url('asset/mine/js/eksotis.js?'.time()); ?>"></script>
+    <?php endif; ?>
 </body>
 
 </html>

@@ -34,7 +34,7 @@ class Antrian extends CI_Controller
 	public function layanan($layanan)
 	{
 		if($this->session->userdata('role')!='admin')
-		{
+		{			
 			$this->load->view('list');
 		}
 		else
@@ -69,9 +69,17 @@ class Antrian extends CI_Controller
 
 	public function ubah()
 	{
+		$this->config->load('antrian_config',TRUE);
+		$eksotis = $this->config->item('eksotis', 'antrian_config');
 		$id = $this->input->post('id');
 		$ke = $this->input->post('ke');
-		return $this->M_antrian->update($id,$ke);
+		$alasan = null;
+		if($eksotis=='true')
+		{
+			$alasan = $this->input->post('alasan');
+		}
+		return $this->M_antrian->update($id,$ke,$alasan);
+		
 	}
 
 	public function hapus()
@@ -114,6 +122,7 @@ class Antrian extends CI_Controller
 		$jam = date("H:i:s");
 		$var_magin_left = 0;
 		$antrian = $this->input->post('no');
+		$layanan = $this->input->post('layanan');
 		$p = printer_open('\\\192.168.2.187\pos-58c');
 		printer_set_option($p, PRINTER_MODE, "RAW"); // mode disobek (gak ngegulung kertas)
 
@@ -137,6 +146,11 @@ class Antrian extends CI_Controller
 		$font = printer_create_font("Arial", 136, 95, PRINTER_FW_BOLD, false, false, false, 0);
 		printer_select_font($p, $font);
 		printer_draw_text($p, "$antrian", 100, 140);
+
+		// jenis layanan
+		$font = printer_create_font("Arial", 46, 17, PRINTER_FW_BOLD, false, false, false, 0);
+		printer_select_font($p,$font);
+		printer_draw_text($p,"$layanan", 100, 250);
 
 		$font = printer_create_font("Arial", 20, 17, PRINTER_FW_NORMAL, false, false, false, 0);
 		printer_select_font($p, $font);

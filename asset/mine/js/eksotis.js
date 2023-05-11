@@ -3,7 +3,7 @@ var nomor_dipanggil;
 var nomor_dipanggil_tanpa_kode;
 var id_dipanggil;
 let toast_show = false;
-$(document).ready(function() {
+$(document).ready(function(){
     $("#sidebar_antrian").addClass("active");
     dt_antrian = $("#dt_antrian").DataTable({
         dom: 'Bfrtip',
@@ -12,55 +12,49 @@ $(document).ready(function() {
         ajax: {
             type: 'post',
             url: base_url + 'antrian/antrian/' + layanan,
-            data: {layanan:loket},
-            dataSrc: "",
+            data: {layanan:layanan},
+            dataSrc: ''
         },
-        columns: [{
+        columns: [
+            {
                 data: 'id'
             },
-            // {
-            //     data: null,
-            //     "sortable": false,
-            //     render: function(data, type, row, meta) {
-            //         return meta.row + meta.settings._iDisplayStart + 1;
-            //     }
-            // },
             {
-                data: null, sortable: false, render: function(data,type,row,meta)
-                {
+                data: null, sortable: false, render: function(data,type,row,meta){
                     return berurut ? kode+row['no'] : row['no'];
-
                 }
             },
             {
-                data: 'status', sortable: false,
+                data: 'status', sortable:false,
             },
             {
-                data: 'catatan'
+                data: 'catatan',
+            },
+            {
+                data: 'ke'
             },
             {
                 data: 'layanan'
             },
             {
-                data: null,
-                "sortable": false,
-                render: function(data, type, row, meta) {
+                data: null, sortable: false, render: function(data,type,row,meta){
                     return "<a href='#' onclick='panggil(" + row['id'] + "," + row['no'] + ")' class='btn btn-primary'><i class='fas fa-phone'></i> Panggil</a>";
                 }
-            },
-        ],        
-        columnDefs: [{
-                targets: [0],
+            }
+        ],
+        columnDefs: [
+            {
+                targets: [0,4],
                 visible: false
             },
             {
                 targets: '_all',
                 className: 'text-center',
-                orderable: false,
-            }            
+                orderable: false
+            }
         ],
         createdRow: (row,data,dataIndex,cells) => {
-            if(data.layanan == "prioritas")
+            if(data.layanan == 'prioritas')
             {
                 $(row).addClass('prioritas');
                 ada_prioritas(data.no);
@@ -68,16 +62,14 @@ $(document).ready(function() {
             // cek_prioritas();
         },
         responsive: true,
-        autoWidth: false,
+        autoWidth: false
     });
-    
     setInterval(() => {
         dt_antrian.ajax.reload(null,false);
     }, 5000);
     dt_antrian.on('draw', function(){
         cek_prioritas();
     });
-    // pengumuman
     $("#btn_pengumuman").click(function() {
         $("#pengumumanModal").modal({
             backdrop: 'static',
@@ -85,102 +77,107 @@ $(document).ready(function() {
         });
     });
     $("#modal_pengumuman").click(function(){
-        pengumuman = $("#text_pengumuman").val();
+        let pengumuman = $("#text_pengumuman").val();
         $.ajax({
-            type: 'post',
-            url: base_url+"antrian/panggil",
+            type: 'POST',
+            url: base_url+'antrian/panggil',
             data: {
                 no: 0,
                 layanan: 'pengumuman',
-                pengumuman: pengumuman
+                pengumuman: pengumuman,
             },
             dataType: 'json',
             beforeSend: function()
             {
-                // console.log('beforesend');
                 $('.loader2').show();
             },
             success: function(respon)
             {
                 if(respon.success == 1)
-                {                        
-                    cek_panggilan_pengumuman(respon.id);                            
+                {
+                    cek_panggilan_pengumuman(respon.id);
                 }
                 else
                 {
-                    $(".loader2").hide();
-                    alert("gagal memanggil, silahkan coba lagi");
+                    $('.loader2').hide();
+                    alert('Gagal memanggil, silahkan coba lagi');
                 }
             },
             error: function(err)
             {
                 console.log(err.responseText);
-                $(".loader2").hide();
-                alert("gagal memanggil, silahkan coba lagi");
+                $('.loader2').hide();
+                alert('Gagal memanggil, silahkan coba lagi');
             }
         });
     });
-    // end pengumuman
 });
-
-function panggil(id, no) {
+const panggil = (id,no) => {
     nomor_dipanggil_tanpa_kode = no;
     no = berurut ? kode+no : no;
     $.ajax({
         type: 'post',
-        url: base_url + 'antrian/panggil',
+        url: base_url+'antrian/panggil',
         data: {
             no: no,
-            layanan: nama_layanan
+            layanan: loket,
         },
         dataType: 'json',
-        beforeSend: function() {
-            // console.log('beforesend');
+        beforeSend: function()
+        {
             $('.loader2').show();
         },
-        success: function(respon) {
-            if (respon.success == 1) {
+        success: function(respon)
+        {
+            if(respon.success == 1)
+            {
                 nomor_dipanggil = no;
                 id_dipanggil = id;
-                cek_panggilan(respon.id);                        
-                // console.log('nomor dipanggil = ' +nomor_dipanggil);
-                // console.log('id_dipanggil = ' +id_dipanggil);
-            } else {
+                cek_panggilan(respon.id)
+            }
+            else
+            {
                 $(".loader2").hide();
                 alert("gagal memanggil, silahkan coba lagi");
             }
         },
-        error: function(err) {
+        error: function(err)
+        {
             console.log(err.responseText);
-            $(".loader2").hide();
+            $('.loader2').hide();
             alert("gagal memanggil, silahkan coba lagi");
         }
     });
 }
 
-function panggil_lagi()
+const panggil_lagi = () =>
 {
     panggil(id_dipanggil,nomor_dipanggil_tanpa_kode);
 }
 
-function cek_panggilan(id) {
+const cek_panggilan = (id) =>
+{
     let terpanggil = false;
     $.ajax({
         type: 'post',
-        url: base_url + 'antrian/cek_panggilan',
+        url: base_url+'antrian/cek_panggilan',
         data: {
             id: id
         },
         dataType: 'json',
-        success: function(respon) {
-            if (respon.efek != 1) {
+        success: function(respon)
+        {
+            if(respon.efek != 1)
+            {
                 terpanggil = true;
             }
         },
-        complete: function() {
-            if (terpanggil) {
-                // $(".loader2").hide();
+        complete: function()
+        {
+            if(terpanggil)
+            {
                 $('#modal-title').text('Nomor Antrian ' + nomor_dipanggil);
+                $('#alasanTunda').val('');
                 $("#modal").modal({
                     backdrop: 'static',
                     keyboard: false
@@ -193,7 +190,9 @@ function cek_panggilan(id) {
                 {
                     $(".loader2").hide();
                 }
-            } else {
+            }
+            else
+            {
                 setTimeout(() => {
                     cek_panggilan(id);
                 }, 3000);
@@ -202,98 +201,86 @@ function cek_panggilan(id) {
     });
 }
 
-function cek_panggilan_pengumuman(id)
+const cek_panggilan_pengumuman = (id) =>
 {
     let terpanggil = false;
     $.ajax({
         type: 'post',
-        url: base_url + 'antrian/cek_panggilan',
+        url: base_url+'antrian/cek_panggilan',
         data: {
             id: id
         },
         dataType: 'json',
-        success: function(respon) {
-            if (respon.efek != 1) {
+        success: function(respon)
+        {
+            if(respon.efek != 1)
+            {
                 terpanggil = true;
             }
         },
-        complete: function() {
-            if (terpanggil) {
+        complete: function()
+        {
+            if(terpanggil)
+            {
                 $(".loader2").hide();
-            } else {
+            }
+            else
+            {
                 setTimeout(() => {
                     cek_panggilan_pengumuman(id);
                 }, 3000);
             }
         }
-    });
-
+    })
 }
 
-function ke() { 
+const ke = () => 
+{
     let opt_ke = $("#ke");
+    const empatLoket = isNaN(loket); // if true berarti loket posbakum kasir bank pos
     $.ajax({
-        type: 'get',
-        url: base_url + 'setting/data_layanan',
+        type: 'post',
+        url: base_url+'setting/data_layanan',
+        data: {
+            loket: empatLoket
+        },
         dataType: 'json',
-        success: function(data) {
+        success: function(data)
+        {
             $("#ke").empty();
-            for (let i = 0; i < data.length; i++) {
+            for(let i=0;i<data.length;i++)
+            {
                 let obj = data[i];
                 $("#ke").append("<option value=" + obj.layanan + ">" + obj.nama_layanan + "</option>");
-            }
-            switch (layanan) {
-                case "pengaduan":
-                    opt_ke.val("posbakum");
-                    break;
-                case "pendaftaran":
-                    opt_ke.val("kasir");
-                    break;
-                case "produk":
-                    opt_ke.val("kasir");
-                    break;
-                case "ecourt":
-                    opt_ke.val("bank");
-                    break;
-                case "kasir":
-                    opt_ke.val("pendaftaran");
-                    break;
-                case "posbakum":
-                    opt_ke.val("pendaftaran");
-                    break;
-                case "bank":
-                    opt_ke.val("ecourt");
-                    break;
-                case "pos":
-                    opt_ke.val("pendaftaran");
-                    break;
-            }
+            }            
         },
-        error: function(err) {
+        error: function(err)
+        {
             console.log(err.responseText);
         },
-        complete: function() {
+        complete: function()
+        {
             $(".loader2").hide();
         }
     });
+}
 
-}        
-
-function arahkan()
+const arahkan = () =>
 {
-    let ke = $("#ke").val();
-    let ke_nama_layanan = $("#ke option:selected").text();
+    const ke = $("#ke").val();
+    const ke_nama_layanan = $("#ke option:selected").text();
+    const alasanTunda = $("#alasanTunda").val().trim();
     $.ajax({
         type: 'post',
         url: base_url+'antrian/ubah',
-        data: {id:id_dipanggil,ke:ke},
+        data: {id:id_dipanggil,ke:ke,alasan:alasanTunda},
         dataType: 'json',
         beforeSend: function()
         {
             $(".loader2").show();
         },
         success: function(respon)
-        {                    
+        {
             if(respon.success==1)
             {
                 $("#modal").modal('toggle');
@@ -318,13 +305,23 @@ function arahkan()
     });
 }
 
-function tunda()
+const tunda = () =>
 {
-    let ke ="tunda";
+    const ke = "tunda";
+    const alasanTUnda = $("#alasanTunda").val().trim();
+    if(alasanTUnda == '')
+    {
+        alert('Silahkan isi alasan menunda antrian');
+        return;
+    }
     $.ajax({
         type: 'post',
         url: base_url+'antrian/ubah',
-        data: {id:id_dipanggil,ke:ke},
+        data: {
+            id: id_dipanggil,
+            ke: ke,
+            alasan: alasanTUnda
+        },
         dataType: 'json',
         beforeSend: function()
         {
@@ -356,7 +353,7 @@ function tunda()
     });
 }
 
-function hapus()
+const hapus = () =>
 {
     $.ajax({
         type: 'post',
@@ -393,7 +390,8 @@ function hapus()
     });
 }
 
-function ada_prioritas(no) {
+const ada_prioritas = (no) =>
+{
     if(toast_show == false)
     {
         $(".toast-body").html(`Nomor antrian <span style="color: red;">${no}</span> adalah prioritas, mohon untuk segera dipanggil`);
@@ -401,8 +399,9 @@ function ada_prioritas(no) {
         toast_show = true;
     }
 }
-function cek_prioritas()
-{
+
+const cek_prioritas = () =>
+{    
     if(!dt_antrian.rows('.prioritas').any())
     {
         $('#toast_ku').toast('hide');

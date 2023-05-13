@@ -73,8 +73,8 @@ function cetak(no,kode) {
             layanan = 'Entahlah';
             break;
     }
-    console.log('ini kode : ' + kode);
-    console.log('ini layanan : ' + layanan);
+    // console.log('ini kode : ' + kode);
+    // console.log('ini layanan : ' + layanan);
     $.ajax({
         type: 'POST',
         url: base_url + "antrian/cetak",
@@ -121,7 +121,7 @@ function cek_panggil()
         {
             if(respon.success==1)
             {
-                memanggil_antrian(respon.id,respon.no,respon.layanan,respon.pengumuman);
+                memanggil_antrian(respon.id,respon.no,respon.layanan,respon.prioritas,respon.pengumuman);
             }
             else
             {
@@ -137,12 +137,16 @@ function cek_panggil()
     });
 }
 
-function memanggil_antrian(id,no,layanan,pengumuman)
+function memanggil_antrian(id,no,layanan,prioritas,pengumuman)
 {
     let text;
     if(pengumuman != null)
     {
         text = pengumuman;
+    }
+    else if(prioritas == 1)
+    {
+        text = "Dipanggil antrian prioritas disabilitas dengan nomor antrian " + no + ". Silahkan ke loket " + layanan;
     }
     else
     {

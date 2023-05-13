@@ -2,6 +2,7 @@ var dt_antrian;
 var nomor_dipanggil;
 var nomor_dipanggil_tanpa_kode;
 var id_dipanggil;
+let isPrioritas;
 let toast_show = false;
 $(document).ready(function(){
     $("#sidebar_antrian").addClass("active");
@@ -38,7 +39,12 @@ $(document).ready(function(){
             },
             {
                 data: null, sortable: false, render: function(data,type,row,meta){
-                    return "<a href='#' onclick='panggil(" + row['id'] + "," + row['no'] + ")' class='btn btn-primary'><i class='fas fa-phone'></i> Panggil</a>";
+                    let isPrior = 0;
+                    if(row['layanan'] == 'prioritas')
+                    {
+                        isPrior = 1;
+                    }
+                    return "<a href='#' onclick='panggil(" + row['id'] + "," + row['no'] + "," + isPrior + ")' class='btn btn-primary'><i class='fas fa-phone'></i> Panggil</a>";
                 }
             }
         ],
@@ -112,15 +118,17 @@ $(document).ready(function(){
         });
     });
 });
-const panggil = (id,no) => {
+const panggil = (id,no,isPrior) => {
     nomor_dipanggil_tanpa_kode = no;
     no = berurut ? kode+no : no;
+    isPrioritas = isPrior;
     $.ajax({
         type: 'post',
         url: base_url+'antrian/panggil',
         data: {
             no: no,
             layanan: loket,
+            prioritas: isPrior
         },
         dataType: 'json',
         beforeSend: function()
@@ -152,7 +160,7 @@ const panggil = (id,no) => {
 
 const panggil_lagi = () =>
 {
-    panggil(id_dipanggil,nomor_dipanggil_tanpa_kode);
+    panggil(id_dipanggil,nomor_dipanggil_tanpa_kode,isPrioritas);
 }
 
 const cek_panggilan = (id) =>

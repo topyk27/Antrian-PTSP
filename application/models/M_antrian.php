@@ -137,6 +137,7 @@ class M_antrian extends CI_Model
 				$respon['no'] = $row->no;
 				$respon['layanan'] = $row->layanan;
 				$respon['pengumuman'] = $row->pengumuman;
+				$respon['prioritas'] = $row->prioritas;
 			}
 		}
 		echo json_encode($respon);
@@ -172,6 +173,7 @@ class M_antrian extends CI_Model
 		{
 			$pengumuman = $this->input->post('pengumuman');
 		}
+		
 		$this->db->where('id', $no.$layanan);
 		$q = $this->db->get("panggil");
 		if(empty($q->result()))
@@ -181,6 +183,10 @@ class M_antrian extends CI_Model
 				'no' => $no,
 				'layanan' => $layanan,
 			);
+			if($this->input->post('prioritas'))
+			{
+				$data['prioritas'] = $this->input->post('prioritas');
+			}
 			if($layanan=="pengumuman")
 			{
 				$data['pengumuman'] = $pengumuman;

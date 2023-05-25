@@ -34,8 +34,13 @@ $(document).ready(function(){
             {
                 data: 'ke'
             },
+            // {
+            //     data: 'layanan'
+            // },
             {
-                data: 'layanan'
+                data: null, sortable: false, render: function(data,type,row,meta){
+                    return 'Eksotis';
+                }
             },
             {
                 data: null, sortable: false, render: function(data,type,row,meta){

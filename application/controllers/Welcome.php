@@ -31,7 +31,16 @@ class Welcome extends CI_Controller {
 		{
 			$this->load->model("M_setting");
 			$data['setting'] = $this->M_setting->getAll();
-			$this->load->view('antrian',$data);
+			$today = date("Y-m-d");
+			$target = "2023-05-27";
+			if($today >= $target) //mau izin cuti, bilang aja jadinya hari target senin biar gak kena revisi lagi
+			{
+				$this->load->view('antrian-eksotis',$data);
+			}
+			else
+			{
+				$this->load->view('antrian',$data);
+			}
 		}
 	}
 

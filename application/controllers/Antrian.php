@@ -16,8 +16,17 @@ class Antrian extends CI_Controller
 	public function monitor()
 	{
 		$this->load->model("M_setting");
+		$this->config->load('antrian_config',TRUE);
+		$eksotis = $this->config->item('eksotis', 'antrian_config');
 		$data['setting'] = $this->M_setting->getAll();		
-		$this->load->view('monitor',$data);		
+		if($eksotis=='false')
+		{
+			$this->load->view('monitor',$data);
+		}
+		else
+		{
+			$this->load->view('monitor-eksotis',$data);			
+		}
 	}
 
     public function tambah($layanan)

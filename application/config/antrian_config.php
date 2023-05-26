@@ -1,7 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['version']='2.0.1';
+$config['version']='2.0.2';
 $config['panggil']= 'luar'; // luar | pc
 //luar = pc monitor yang berbunyi
 //pc = pc ruang yang berbunyi

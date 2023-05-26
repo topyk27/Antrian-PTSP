@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2.0.2] - 2023-05-26
+### Changed
+- Fix bug monitor antrian eksotis
+
 ## [2.0.1] - 2023-05-25
 ### Changed
 - Pengambilan antrian hanya menggunakan dua tombol, eksotis dan prioritas

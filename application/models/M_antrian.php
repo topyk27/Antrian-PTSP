@@ -93,7 +93,12 @@ class M_antrian extends CI_Model
 		$this->config->load('antrian_config',TRUE);
 		$eksotis = $this->config->item('eksotis', 'antrian_config');
 		$post = $this->input->post();
-		$layanan = $post['layanan'];		
+		$layanan = $post['layanan'];
+		$monitor = false;
+		if(isset($post['monitor']))		
+		{
+			$monitor = true;
+		}
 		// $layanan = 'pengaduan';
 		if($eksotis=='false')
 		{
@@ -101,19 +106,33 @@ class M_antrian extends CI_Model
 		}
 		else
 		{
-			$userId = $this->session->userdata('id');
-			$statement = "SELECT id, no, status, catatan, layanan, ke FROM antrian WHERE tanggal = '".$tgl."' && status NOT LIKE 'kelar' && dipanggil = $userId ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";
-			$adaDiPanggil = $this->db->query($statement);
-			if(empty($adaDiPanggil->result()))
-			{				
+			if($monitor) //ambil data dari montior
+			{
 				if($layanan == 'pengaduan' || $layanan == 'pendaftaran' || $layanan == 'produk' || $layanan == 'ecourt' || $layanan == 'prioritas')
 				{
-					$statement = "SELECT id, no, status, catatan, layanan, ke FROM antrian WHERE tanggal = '".$tgl."' && status NOT LIKE 'kelar' && dipanggil = 0 && ke IN ('pengaduan','pendaftaran','produk','ecourt', 'prioritas') ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";				
+					$statement = "SELECT id, no, status, catatan, layanan, ke FROM antrian WHERE tanggal = '".$tgl."' && status NOT LIKE 'kelar' && dipanggil = 0 && ke IN ('pengaduan','pendaftaran','produk','ecourt', 'prioritas') ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";
 				}
 				else
 				{
 					$statement = "SELECT id, no, status, catatan, layanan, ke FROM antrian WHERE tanggal = '".$tgl."' && status NOT LIKE 'kelar' && dipanggil = 0 && ke = '$layanan' ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";
-				}				
+				}
+			}
+			else
+			{
+				$userId = $this->session->userdata('id');
+				$statement = "SELECT id, no, status, catatan, layanan, ke FROM antrian WHERE tanggal = '".$tgl."' && status NOT LIKE 'kelar' && dipanggil = $userId ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";
+				$adaDiPanggil = $this->db->query($statement);
+				if(empty($adaDiPanggil->result()))
+				{				
+					if($layanan == 'pengaduan' || $layanan == 'pendaftaran' || $layanan == 'produk' || $layanan == 'ecourt' || $layanan == 'prioritas')
+					{
+						$statement = "SELECT id, no, status, catatan, layanan, ke FROM antrian WHERE tanggal = '".$tgl."' && status NOT LIKE 'kelar' && dipanggil = 0 && ke IN ('pengaduan','pendaftaran','produk','ecourt', 'prioritas') ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";				
+					}
+					else
+					{
+						$statement = "SELECT id, no, status, catatan, layanan, ke FROM antrian WHERE tanggal = '".$tgl."' && status NOT LIKE 'kelar' && dipanggil = 0 && ke = '$layanan' ORDER BY CASE WHEN layanan = 'prioritas' THEN 1 ELSE 2 END, diperbarui ASC";
+					}
+			}
 			}
 		}
 		$query = $this->db->query($statement);

@@ -9,6 +9,6 @@ $config['berurut']='false'; // if berurut true, eksotis wajib false
 $config['rsvc']='true';
 $config['print']='false'; //true | false
 //print not tested
-$config['eksotis']='true';
+$config['eksotis']='false';
 
  ?>
